@@ -53,7 +53,7 @@ const items = p.cover ? JSON.stringify(await lightboxItems(p.images)) : undefine
   <p class="summary">{p.summary}</p>
   {
     p.href && (
-      <a class="case-link" href={p.href}>
+      <a class="case-link" href={p.href} data-track="case_study_opened" data-track-label={p.slug}>
         {t('work.caseLink')}
         <span class="sr-only">: {p.title}</span>
         <Icon name="arrow-right" />

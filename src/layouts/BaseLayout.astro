@@ -7,7 +7,7 @@ import HudFrame from '../components/HudFrame.astro';
 import LangBanner from '../components/LangBanner.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import Analytics from '../components/Analytics.astro';
+import PostHog from '../components/posthog.astro';
 import { site } from '../site.config';
 import { useT, type Lang } from '../i18n';
 import { rssPath, type Alternates } from '../i18n/routes';
@@ -54,6 +54,7 @@ const { t } = useT(lang);
     <link rel="alternate" type="application/rss+xml" title={t('meta.siteTitle')} href={rssPath(lang)} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <SEO lang={lang} alternates={alternates} {...seo} />
+    <PostHog lang={lang} />
     <slot name="head" />
     {
       site.cloudflareAnalyticsToken && (
@@ -70,7 +71,6 @@ const { t } = useT(lang);
       <slot />
     </main>
     <Footer lang={lang} />
-    {site.posthog.key && <Analytics lang={lang} />}
   </body>
 </html>
 

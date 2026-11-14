@@ -188,6 +188,11 @@ const { t } = useT(lang);
       lastFocus = trigger;
       nav.hidden = list.length < 2;
       show(start);
+      const selected = list[Math.max(0, start)];
+      (window as unknown as { ybTrack?: (event: string, properties?: Record<string, unknown>) => void }).ybTrack?.('portfolio_image_opened', {
+        gallery_source: selected?.slug ? 'work' : 'case_study',
+        ...(selected?.slug ? { project_slug: selected.slug } : {}),
+      });
       dlg.showModal();
       document.documentElement.style.overflow = 'hidden';
       closeBtn.focus();
