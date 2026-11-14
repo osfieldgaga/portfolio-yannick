@@ -32,7 +32,7 @@ const canonical = abs(alternates[lang]);
 const ogImage = abs(image ?? site.ogImage);
 
 // Build-time checks so a missing or overlong description is caught before launch.
-if (import.meta.env.SSR) {
+if (import.meta.env.SSR && !noindex) {
   const where = alternates[lang];
   if (!description?.trim()) console.warn(`[seo] ${where}: missing meta description`);
   else if (description.length > 160) console.warn(`[seo] ${where}: description is ${description.length} characters (aim for ≤ 160)`);
@@ -43,12 +43,18 @@ const ld = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
-<link rel="canonical" href={canonical} />
-{noindex && <meta name="robots" content="noindex" />}
-
-<link rel="alternate" hreflang="fr" href={abs(alternates.fr)} />
-<link rel="alternate" hreflang="en" href={abs(alternates.en)} />
-<link rel="alternate" hreflang="x-default" href={abs(alternates.fr)} />
+{
+  noindex ? (
+    <meta name="robots" content="noindex" />
+  ) : (
+    <>
+      <link rel="canonical" href={canonical} />
+      <link rel="alternate" hreflang="fr" href={abs(alternates.fr)} />
+      <link rel="alternate" hreflang="en" href={abs(alternates.en)} />
+      <link rel="alternate" hreflang="x-default" href={abs(alternates.fr)} />
+    </>
+  )
+}
 
 <meta property="og:type" content={type} />
 <meta property="og:site_name" content={site.name} />

@@ -1,69 +1,108 @@
 ---
 /**
- * Contact form (markup and styles from the design). Phase 4 adds client-side
- * validation and the Web3Forms submission script. Without JavaScript the form
- * still posts to Web3Forms directly.
+ * Contact form (design: validation pattern with real labels, aria-describedby,
+ * error summary and focus on the first error). Sends through Web3Forms.
+ * Without JavaScript the form still posts to Web3Forms directly.
  */
 import { site } from '../site.config';
 import { useT, type Lang } from '../i18n';
+import Icon from './Icon.astro';
 
 interface Props {
   lang: Lang;
+  /** h3 inside the home section; h2 on the standalone contact page (whose title is the h1). */
+  headingLevel?: 'h2' | 'h3';
 }
 
-const { lang } = Astro.props;
+const { lang, headingLevel = 'h3' } = Astro.props;
 const { t, d } = useT(lang);
+const H = headingLevel;
+
+const g = globalThis as { __ybFormWarned?: boolean };
+if (import.meta.env.PROD && !site.web3formsKey && !g.__ybFormWarned) {
+  g.__ybFormWarned = true;
+  console.warn('[contact] PUBLIC_WEB3FORMS_KEY is not set: the contact form cannot send messages (see .env.example).');
+}
+
+// Messages for the client script
+const messages = {
+  errName: t('contact.errName'),
+  errEmail: t('contact.errEmail'),
+  errEmailF: t('contact.errEmailF'),
+  errType: t('contact.errType'),
+  errMsg: t('contact.errMsg'),
+  summary1: t('contact.summary1'),
+  summaryN: t('contact.summaryN'),
+  sentB: t('contact.sentB'),
+  errSend: t('contact.errSend', { email: site.email }),
+  send: t('contact.send'),
+  sending: t('contact.sending'),
+};
 ---
 
-<form class="form" action="https://api.web3forms.com/submit" method="POST" novalidate aria-labelledby="form-title" data-contact-form>
-  <h3 id="form-title" class="label">{t('contact.formH')}</h3>
-
-  <input type="hidden" name="access_key" value={site.web3formsKey} />
-  <input type="hidden" name="subject" value={`yannickbamona.com — ${t('contact.formH')}`} />
-  <input type="hidden" name="from_name" value="yannickbamona.com" />
-  <!-- Honeypot: real visitors never see or fill this field -->
-  <div class="hp" aria-hidden="true">
-    <label for="f-botcheck">{t('contact.honeypot')}</label>
-    <input id="f-botcheck" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" />
+<div class="contact-form" data-contact data-messages={JSON.stringify(messages)} data-dev={import.meta.env.DEV ? 'true' : undefined}>
+  <div class="sent" role="status" tabindex="-1" data-sent hidden>
+    <span class="slashes" aria-hidden="true">///</span>
+    <H class="sent-title">{t('contact.sentT')}</H>
+    <p data-sent-body></p>
+    <button type="button" class="btn btn-secondary btn-sm again" data-again>{t('contact.again')}</button>
   </div>
 
-  <div class="row">
-    <div class="field">
-      <label for="f-name">{t('contact.name')} <span class="req" aria-hidden="true">*</span></label>
-      <input id="f-name" name="name" type="text" autocomplete="name" required class="input" />
-      <p id="err-name" class="err" hidden></p>
+  <form class="form" action="https://api.web3forms.com/submit" method="POST" novalidate aria-labelledby="form-title" data-contact-form>
+    <H id="form-title" class="label">{t('contact.formH')}</H>
+
+    <div class="summary" role="alert" tabindex="-1" data-summary hidden>
+      <Icon name="alert" size={18} stroke="var(--red)" />
+      <span data-summary-text></span>
     </div>
-    <div class="field">
-      <label for="f-email">{t('contact.email')} <span class="req" aria-hidden="true">*</span></label>
-      <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required class="input" />
-      <p id="err-email" class="err" hidden></p>
+
+    <input type="hidden" name="access_key" value={site.web3formsKey} />
+    <input type="hidden" name="subject" value={`yannickbamona.com — ${t('contact.formH')}`} />
+    <input type="hidden" name="from_name" value="yannickbamona.com" />
+    <!-- Honeypot: real visitors never see or fill this field -->
+    <div class="hp" aria-hidden="true">
+      <label for="f-botcheck">{t('contact.honeypot')}</label>
+      <input id="f-botcheck" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" />
     </div>
-  </div>
 
-  <div class="field">
-    <label for="f-type">{t('contact.type')} <span class="req" aria-hidden="true">*</span></label>
-    <select id="f-type" name="project_type" required class="input">
-      <option value="">{t('contact.choose')}</option>
-      {d.contact.types.map((o) => <option value={o}>{o}</option>)}
-    </select>
-    <p id="err-type" class="err" hidden></p>
-  </div>
+    <div class="row">
+      <div class="field">
+        <label for="f-name">{t('contact.name')} <span class="req" aria-hidden="true">*</span></label>
+        <input id="f-name" name="name" type="text" autocomplete="name" required class="input" aria-invalid="false" />
+        <p id="err-name" class="err" hidden></p>
+      </div>
+      <div class="field">
+        <label for="f-email">{t('contact.email')} <span class="req" aria-hidden="true">*</span></label>
+        <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required class="input" aria-invalid="false" />
+        <p id="err-email" class="err" hidden></p>
+      </div>
+    </div>
 
-  <div class="field">
-    <label for="f-msg">{t('contact.msg')} <span class="req" aria-hidden="true">*</span></label>
-    <p id="hint-msg" class="hint">{t('contact.msgHint')}</p>
-    <textarea id="f-msg" name="message" rows="5" required class="input" aria-describedby="hint-msg"></textarea>
-    <p id="err-msg" class="err" hidden></p>
-  </div>
+    <div class="field">
+      <label for="f-type">{t('contact.type')} <span class="req" aria-hidden="true">*</span></label>
+      <select id="f-type" name="project_type" required class="input" aria-invalid="false">
+        <option value="">{t('contact.choose')}</option>
+        {d.contact.types.map((o) => <option value={o}>{o}</option>)}
+      </select>
+      <p id="err-type" class="err" hidden></p>
+    </div>
 
-  <div class="foot">
-    <p class="req-note"><span class="req" aria-hidden="true">*</span> {t('contact.req')}</p>
-    <button type="submit" class="btn btn-primary submit">
-      {t('contact.send')}
-      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
-    </button>
-  </div>
-</form>
+    <div class="field">
+      <label for="f-msg">{t('contact.msg')} <span class="req" aria-hidden="true">*</span></label>
+      <p id="hint-msg" class="hint">{t('contact.msgHint')}</p>
+      <textarea id="f-msg" name="message" rows="5" required class="input" aria-invalid="false" aria-describedby="hint-msg"></textarea>
+      <p id="err-msg" class="err" hidden></p>
+    </div>
+
+    <div class="foot">
+      <p class="req-note"><span class="req" aria-hidden="true">*</span> {t('contact.req')}</p>
+      <button type="submit" class="btn btn-primary submit">
+        <span data-submit-label>{t('contact.send')}</span>
+        <Icon name="arrow-right" />
+      </button>
+    </div>
+  </form>
+</div>
 
 <style>
   .form {
@@ -114,6 +153,48 @@ const { t, d } = useT(lang);
   .submit {
     padding: 0 22px;
   }
+  .submit[aria-disabled='true'] {
+    opacity: 0.7;
+    cursor: progress;
+  }
+  .summary {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    border: 1px solid var(--red);
+    border-left-width: 4px;
+    font-size: 15px;
+    font-weight: 600;
+    outline: none;
+  }
+  .summary :global(svg) {
+    flex: none;
+    margin-top: 2px;
+  }
+  .sent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    outline: none;
+    min-height: 280px;
+    justify-content: center;
+  }
+  .sent[hidden] {
+    display: none;
+  }
+  .sent-title {
+    font-weight: 800;
+    font-stretch: 112%;
+    font-size: 28px;
+  }
+  .sent p {
+    font-size: 17px;
+  }
+  .again {
+    align-self: flex-start;
+    margin-top: 8px;
+  }
   .hp {
     position: absolute;
     left: -9999px;
@@ -122,3 +203,130 @@ const { t, d } = useT(lang);
     overflow: hidden;
   }
 </style>
+
+<script>
+  type Key = 'name' | 'email' | 'type' | 'msg';
+  const KEYS: Key[] = ['name', 'email', 'type', 'msg'];
+
+  document.querySelectorAll<HTMLElement>('[data-contact]').forEach((root) => {
+    const m = JSON.parse(root.dataset.messages || '{}') as Record<string, string>;
+    const form = root.querySelector<HTMLFormElement>('[data-contact-form]')!;
+    const sent = root.querySelector<HTMLElement>('[data-sent]')!;
+    const sentBody = root.querySelector<HTMLElement>('[data-sent-body]')!;
+    const summary = root.querySelector<HTMLElement>('[data-summary]')!;
+    const summaryText = root.querySelector<HTMLElement>('[data-summary-text]')!;
+    const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const submitLabel = form.querySelector<HTMLElement>('[data-submit-label]')!;
+    const fields: Record<Key, HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> = {
+      name: form.querySelector('#f-name')!,
+      email: form.querySelector('#f-email')!,
+      type: form.querySelector('#f-type')!,
+      msg: form.querySelector('#f-msg')!,
+    };
+    let tried = false;
+    let busy = false;
+
+    const validate = (): Partial<Record<Key, string>> => {
+      const e: Partial<Record<Key, string>> = {};
+      const v = (k: Key) => fields[k].value.trim();
+      if (!v('name')) e.name = m.errName;
+      if (!v('email')) e.email = m.errEmail;
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v('email'))) e.email = m.errEmailF;
+      if (!v('type')) e.type = m.errType;
+      if (v('msg').length < 10) e.msg = m.errMsg;
+      return e;
+    };
+
+    const render = (errors: Partial<Record<Key, string>>) => {
+      KEYS.forEach((k) => {
+        const el = fields[k];
+        const err = root.querySelector<HTMLElement>(`#err-${k}`)!;
+        const msg = errors[k];
+        err.textContent = msg ?? '';
+        err.hidden = !msg;
+        el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+        const describedBy = [k === 'msg' ? 'hint-msg' : '', msg ? `err-${k}` : ''].filter(Boolean).join(' ');
+        if (describedBy) el.setAttribute('aria-describedby', describedBy);
+        else el.removeAttribute('aria-describedby');
+      });
+    };
+
+    const showSummary = (text: string | null) => {
+      summary.hidden = !text;
+      summaryText.textContent = text ?? '';
+    };
+
+    KEYS.forEach((k) =>
+      fields[k].addEventListener(k === 'type' ? 'change' : 'input', () => {
+        if (!tried) return;
+        const errors = validate();
+        render(errors);
+        const n = Object.keys(errors).length;
+        showSummary(n ? (n === 1 ? m.summary1 : m.summaryN.replace('{n}', String(n))) : null);
+      }),
+    );
+
+    const setBusy = (on: boolean) => {
+      busy = on;
+      submitBtn.setAttribute('aria-disabled', String(on));
+      submitLabel.textContent = on ? m.sending : m.send;
+    };
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      if (busy) return;
+      tried = true;
+      const errors = validate();
+      render(errors);
+      const n = Object.keys(errors).length;
+      if (n) {
+        showSummary(n === 1 ? m.summary1 : m.summaryN.replace('{n}', String(n)));
+        fields[KEYS.find((k) => errors[k])!].focus();
+        return;
+      }
+      showSummary(null);
+
+      const data = new FormData(form);
+      const name = fields.name.value.trim();
+      const done = () => {
+        sentBody.textContent = m.sentB.replace('{name}', name);
+        form.hidden = true;
+        sent.hidden = false;
+        sent.focus();
+      };
+
+      // Honeypot ticked: a bot. Pretend it worked, send nothing.
+      if (data.get('botcheck')) return done();
+
+      const key = String(data.get('access_key') || '');
+      if (!key && root.dataset.dev) {
+        console.info('[contact] No PUBLIC_WEB3FORMS_KEY: simulating a successful send in dev.', Object.fromEntries(data));
+        return done();
+      }
+
+      setBusy(true);
+      try {
+        const res = await fetch(form.action, { method: 'POST', headers: { Accept: 'application/json' }, body: data });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || json.success === false) throw new Error(json.message || res.statusText);
+        done();
+      } catch (err) {
+        console.error('[contact]', err);
+        showSummary(m.errSend);
+        summary.focus();
+      } finally {
+        setBusy(false);
+      }
+    });
+
+    root.querySelector('[data-again]')!.addEventListener('click', () => {
+      form.reset();
+      tried = false;
+      render({});
+      showSummary(null);
+      sent.hidden = true;
+      form.hidden = false;
+      fields.name.focus();
+    });
+  });
+</script>

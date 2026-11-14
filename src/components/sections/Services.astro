@@ -12,6 +12,7 @@ interface Props {
 const { lang, headingLevel = 'h2' } = Astro.props;
 const { t, d } = useT(lang);
 const H = headingLevel;
+const H3 = headingLevel === 'h1' ? 'h2' : 'h3';
 ---
 
 <section id={sectionId(lang, 'services')} class="block" aria-labelledby="services-title">
@@ -24,7 +25,7 @@ const H = headingLevel;
           <span class="num" aria-hidden="true">
             S/0{i + 1}
           </span>
-          <h3 class="h-card">{s.t}</h3>
+          <H3 class="h-card">{s.t}</H3>
           <p class="desc">{s.d}</p>
           <p class="tools">{s.tools}</p>
         </li>

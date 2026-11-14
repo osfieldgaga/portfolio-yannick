@@ -1,0 +1,20 @@
+---
+/** Standalone About page: /a-propos/ and /en/about/. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import About from '../components/sections/About.astro';
+import Tools from '../components/sections/Tools.astro';
+import { useT, type Lang } from '../i18n';
+import { pages } from '../i18n/routes';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const { t } = useT(lang);
+---
+
+<BaseLayout lang={lang} title={t('meta.aboutTitle')} description={t('meta.aboutDescription')} alternates={pages.about} type="profile">
+  <About lang={lang} headingLevel="h1" />
+  <Tools lang={lang} />
+  <div class="page-end" aria-hidden="true"></div>
+</BaseLayout>

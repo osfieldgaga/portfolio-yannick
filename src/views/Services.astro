@@ -1,0 +1,19 @@
+---
+/** Standalone Services page: /services/ and /en/services/. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Services from '../components/sections/Services.astro';
+import Contact from '../components/sections/Contact.astro';
+import { useT, type Lang } from '../i18n';
+import { pages } from '../i18n/routes';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const { t } = useT(lang);
+---
+
+<BaseLayout lang={lang} title={t('meta.servicesTitle')} description={t('meta.servicesDescription')} alternates={pages.services}>
+  <Services lang={lang} headingLevel="h1" />
+  <Contact lang={lang} />
+</BaseLayout>

@@ -11,6 +11,7 @@ interface Props {
 const { lang, headingLevel = 'h2' } = Astro.props;
 const { t, d } = useT(lang);
 const H = headingLevel;
+const H3 = headingLevel === 'h1' ? 'h2' : 'h3';
 ---
 
 <section id={sectionId(lang, 'about')} class="block" aria-labelledby="about-title">
@@ -27,7 +28,7 @@ const H = headingLevel;
       <p>{t('about.bio1')}</p>
       <p>{t('about.bio2')}</p>
       <div class="langs">
-        <h3 class="label">{t('about.langH')}</h3>
+        <H3 class="label">{t('about.langH')}</H3>
         {d.about.langs.map((l) => <span>{l}</span>)}
       </div>
     </div>
@@ -35,7 +36,7 @@ const H = headingLevel;
 
   <div class="lists">
     <div>
-      <h3 class="list-h">{t('about.expH')}</h3>
+      <H3 class="list-h">{t('about.expH')}</H3>
       <ol class="tl">
         {
           d.about.timeline.map((e) => (
@@ -55,7 +56,7 @@ const H = headingLevel;
       </ol>
     </div>
     <div>
-      <h3 class="list-h">{t('about.eduH')}</h3>
+      <H3 class="list-h">{t('about.eduH')}</H3>
       <ol class="tl">
         {
           d.about.education.map((e) => (
@@ -115,7 +116,7 @@ const H = headingLevel;
     padding-top: 16px;
     border-top: 1px solid var(--line);
   }
-  .langs h3 {
+  .langs .label {
     width: 100%;
   }
   .langs span {

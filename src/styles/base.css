@@ -355,3 +355,8 @@ textarea.input {
   min-height: 140px;
   resize: vertical;
 }
+
+/* Bottom spacing after the last section of a page */
+.page-end {
+  height: clamp(72px, 9vw, 128px);
+}
