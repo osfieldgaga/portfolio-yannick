@@ -39,16 +39,14 @@ export const site = {
   cloudflareAnalyticsToken: '',
 
   /**
-   * PostHog product analytics. Leave `key` empty to disable it entirely.
+   * PostHog product analytics. Values are public browser configuration.
    * Runs in cookieless mode: no cookies, no local/session storage, so no consent banner.
    * In PostHog, turn on "Cookieless server hash mode" in Project settings → Web analytics,
    * otherwise events sent in cookieless mode are dropped.
    */
   posthog: {
-    /** Project API key (starts with "phc_"). Safe to publish. Can also be set with PUBLIC_POSTHOG_KEY. */
-    key: import.meta.env.PUBLIC_POSTHOG_KEY ?? '',
-    /** https://eu.i.posthog.com (EU cloud) or https://us.i.posthog.com (US cloud). TODO: confirm the project's region. */
-    host: import.meta.env.PUBLIC_POSTHOG_HOST ?? 'https://eu.i.posthog.com',
+    key: import.meta.env.PUBLIC_POSTHOG_PROJECT_TOKEN ?? '',
+    host: import.meta.env.PUBLIC_POSTHOG_HOST ?? '',
   },
 
   /** Google Search Console "HTML tag" verification token (content="…" value only). */

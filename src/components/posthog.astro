@@ -1,0 +1,62 @@
+---
+/**
+ * Shared browser initialization for PostHog and the site's custom-event bridge.
+ */
+import { site } from '../site.config';
+import type { Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<script is:inline define:vars={{ apiKey: site.posthog.key, apiHost: site.posthog.host, lang, isDev: import.meta.env.DEV }}>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split('.');2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement('script')).type='text/javascript',p.crossOrigin='anonymous',p.async=!0,p.src=s.api_host+'/static/array.js',(r=t.getElementsByTagName('script')[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a='posthog',u.people=u.people||[],Object.defineProperty(u,'toString',{configurable:!0,enumerable:!0,writable:!0,value:function(t){var e='posthog';return'posthog'!==a&&(e+='.'+a),t||(e+=' (stub)'),e}}),Object.defineProperty(u.people,'toString',{configurable:!0,enumerable:!0,writable:!0,value:function(){return u.toString(1)+'.people (stub)'}}),o='capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId'.split(' '),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+
+  if (!apiKey) {
+    if (isDev) {
+      console.error('PUBLIC_POSTHOG_PROJECT_TOKEN variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once PUBLIC_POSTHOG_PROJECT_TOKEN is configured');
+    }
+  } else if (!apiHost) {
+    if (isDev) {
+      console.error('PUBLIC_POSTHOG_HOST variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once PUBLIC_POSTHOG_HOST is configured');
+    }
+  } else {
+    posthog.init(apiKey, {
+      api_host: apiHost,
+      cookieless_mode: 'always',
+      person_profiles: 'identified_only',
+      capture_pageview: true,
+      capture_pageleave: true,
+      capture_exceptions: {
+        capture_unhandled_errors: true,
+        capture_unhandled_rejections: true,
+        capture_console_errors: false,
+      },
+      logs: {
+        serviceName: 'yannickbamona-com',
+        environment: isDev ? 'development' : 'production',
+      },
+      loaded: (client) => {
+        window.ybLog = {
+          info: (message, attributes) => client.logger.info(message, attributes),
+        };
+        window.ybLog.info('portfolio analytics initialized', { site_lang: lang });
+      },
+    });
+    posthog.register({ site_lang: lang });
+
+    window.ybTrack = (event, props) => posthog.capture(event, props);
+    document.addEventListener('click', (event) => {
+      const target = event.target.closest('[data-track]');
+      if (target) {
+        window.ybTrack(target.dataset.track, target.dataset.trackLabel ? { label: target.dataset.trackLabel } : undefined);
+        if (target.dataset.track === 'case_study_opened') {
+          window.ybLog?.info('case study opened', { project_slug: target.dataset.trackLabel });
+        }
+      }
+    });
+  }
+</script>

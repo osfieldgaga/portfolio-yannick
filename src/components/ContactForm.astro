@@ -289,7 +289,10 @@ const messages = {
       const data = new FormData(form);
       const name = fields.name.value.trim();
       const done = () => {
-        (window as unknown as { ybTrack?: (e: string, p?: Record<string, unknown>) => void }).ybTrack?.('contact_form_sent', {
+        (window as unknown as { ybTrack?: (e: string, p?: Record<string, unknown>) => void; ybLog?: { info: (message: string, attributes?: Record<string, unknown>) => void } }).ybTrack?.('contact_form_sent', {
+          project_type: fields.type.value,
+        });
+        (window as unknown as { ybLog?: { info: (message: string, attributes?: Record<string, unknown>) => void } }).ybLog?.info('contact form submitted', {
           project_type: fields.type.value,
         });
         sentBody.textContent = m.sentB.replace('{name}', name);
