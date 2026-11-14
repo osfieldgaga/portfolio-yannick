@@ -1,0 +1,108 @@
+---
+import SectionHead from '../SectionHead.astro';
+import ProjectCard from '../ProjectCard.astro';
+import { useT, type Lang } from '../../i18n';
+import { sectionId } from '../../i18n/routes';
+import { CATEGORIES, type ProjectCardData } from '../../lib/projects';
+
+interface Props {
+  lang: Lang;
+  projects: ProjectCardData[];
+}
+
+const { lang, projects } = Astro.props;
+const { t } = useT(lang);
+
+// Only categories that actually have projects get a filter button.
+const filters = [
+  { key: 'all', label: t('work.all'), count: projects.length },
+  ...CATEGORIES.map((c) => ({ key: c, label: t(`categories.${c}`), count: projects.filter((p) => p.category === c).length })).filter((f) => f.count > 0),
+];
+---
+
+<section id={sectionId(lang, 'work')} class="block" aria-labelledby="work-title">
+  <SectionHead index="01 / 05" kicker={t('work.kicker')} />
+  <div class="head">
+    <h2 id="work-title" class="h-section">{t('work.title')}</h2>
+    <p class="intro">{t('work.intro')}</p>
+  </div>
+
+  <div class="filters" role="group" aria-label={t('work.filterLabel')} data-filters>
+    {
+      filters.map((f) => (
+        <button type="button" class="filter" aria-pressed={f.key === 'all' ? 'true' : 'false'} data-filter={f.key}>
+          {f.label}
+          <span class="n">{f.count}</span>
+        </button>
+      ))
+    }
+  </div>
+  <p class="sr-only" aria-live="polite" data-filter-status data-template={t('work.showing')}></p>
+
+  <ul class="grid" data-project-grid>
+    {projects.map((p) => <ProjectCard lang={lang} project={p} />)}
+  </ul>
+</section>
+
+<style>
+  .head {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    gap: 16px 48px;
+    align-items: end;
+    margin: 16px 0 32px;
+  }
+  .intro {
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 520px;
+    text-wrap: pretty;
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+  }
+  .filter {
+    min-height: 44px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+  }
+  .filter:hover {
+    border-color: var(--red);
+  }
+  .filter .n {
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+  }
+  .filter[aria-pressed='true'] {
+    font-weight: 700;
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+  .filter[aria-pressed='true'] .n {
+    color: inherit;
+    opacity: 0.75;
+  }
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 32px 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+    gap: 44px 24px;
+  }
+</style>

@@ -1,0 +1,93 @@
+---
+/**
+ * Non-blocking suggestion: "This page is also available in English".
+ * Hidden by default; shown by script only when the visitor's saved choice or
+ * browser language is the other language. Never redirects.
+ */
+import { useT, otherLang, type Lang } from '../i18n';
+import type { Alternates } from '../i18n/routes';
+
+interface Props {
+  lang: Lang;
+  alternates: Alternates;
+}
+const { lang, alternates } = Astro.props;
+const other = otherLang(lang);
+const { t } = useT(other);
+---
+
+<div class="lang-banner" data-lang-banner data-page-lang={lang} data-other-lang={other} lang={other} hidden>
+  <div class="inner">
+    <p>
+      <span class="slashes" aria-hidden="true">///</span>
+      <span>{t('banner.available')}</span>
+      <a href={alternates[other]} hreflang={other} data-set-lang={other}>{t('banner.read')}</a>
+    </p>
+    <button type="button" class="dismiss" aria-label={t('banner.dismiss')} data-lang-banner-dismiss>
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .lang-banner {
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    margin-top: var(--head-pad);
+  }
+  .lang-banner + :global(.site-header) {
+    /* the banner already clears the HUD frame */
+    padding-top: 0;
+  }
+  .inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 4px var(--pad-x);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  p {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 10px;
+    font-size: 14px;
+  }
+  a {
+    font-weight: 700;
+  }
+  .dismiss {
+    width: 44px;
+    height: 44px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 0;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .dismiss:hover {
+    color: var(--red);
+  }
+</style>
+
+<script>
+  import { read, write } from '../scripts/prefs';
+
+  const banner = document.querySelector<HTMLElement>('[data-lang-banner]');
+  if (banner && read('yb-lang-banner') !== 'dismissed') {
+    const page = banner.dataset.pageLang!;
+    const other = banner.dataset.otherLang!;
+    const saved = read('yb-lang');
+    const browser = (navigator.languages?.[0] || navigator.language || '').slice(0, 2).toLowerCase();
+    const prefersOther = saved ? saved === other : browser === other && browser !== page;
+    if (prefersOther) banner.hidden = false;
+    banner.querySelector('[data-lang-banner-dismiss]')?.addEventListener('click', () => {
+      banner.hidden = true;
+      write('yb-lang-banner', 'dismissed');
+    });
+  }
+</script>

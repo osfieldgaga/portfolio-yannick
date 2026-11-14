@@ -1,0 +1,72 @@
+---
+import SectionHead from '../SectionHead.astro';
+import { useT, type Lang } from '../../i18n';
+import { sectionId } from '../../i18n/routes';
+
+interface Props {
+  lang: Lang;
+  /** "h1" when used as the main heading of the standalone services page. */
+  headingLevel?: 'h1' | 'h2';
+}
+
+const { lang, headingLevel = 'h2' } = Astro.props;
+const { t, d } = useT(lang);
+const H = headingLevel;
+---
+
+<section id={sectionId(lang, 'services')} class="block" aria-labelledby="services-title">
+  <SectionHead index="02 / 05" kicker={t('services.kicker')} />
+  <H id="services-title" class="h-section title">{t('services.title')}</H>
+  <ul class="list">
+    {
+      d.services.items.map((s, i) => (
+        <li>
+          <span class="num" aria-hidden="true">
+            S/0{i + 1}
+          </span>
+          <h3 class="h-card">{s.t}</h3>
+          <p class="desc">{s.d}</p>
+          <p class="tools">{s.tools}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .title {
+    margin: 16px 0 40px;
+    max-width: 16ch;
+  }
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 40px 24px;
+  }
+  li {
+    border-top: 2px solid var(--line-strong);
+    padding-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .num {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .desc {
+    font-size: 15px;
+    line-height: 1.55;
+    text-wrap: pretty;
+  }
+  .tools {
+    font-size: 13px;
+    color: var(--muted);
+  }
+</style>

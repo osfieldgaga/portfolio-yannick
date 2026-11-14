@@ -1,0 +1,184 @@
+---
+import SectionHead from '../SectionHead.astro';
+import { useT, type Lang } from '../../i18n';
+import { sectionId } from '../../i18n/routes';
+
+interface Props {
+  lang: Lang;
+  headingLevel?: 'h1' | 'h2';
+}
+
+const { lang, headingLevel = 'h2' } = Astro.props;
+const { t, d } = useT(lang);
+const H = headingLevel;
+---
+
+<section id={sectionId(lang, 'about')} class="block" aria-labelledby="about-title">
+  <SectionHead index="03 / 05" kicker={t('about.kicker')} />
+  <div class="top">
+    <div class="notch notch-br notch-soft photo-frame" style="--c:20px">
+      <!-- TODO: replace with the portrait photo (see TODO.md) -->
+      <div class="notch-in photo hatch" role="img" aria-label={t('about.photo')}>
+        <span class="hatch-label">{t('about.photo')}</span>
+      </div>
+    </div>
+    <div class="bio">
+      <H id="about-title" class="h-section title">{t('about.title')}</H>
+      <p>{t('about.bio1')}</p>
+      <p>{t('about.bio2')}</p>
+      <div class="langs">
+        <h3 class="label">{t('about.langH')}</h3>
+        {d.about.langs.map((l) => <span>{l}</span>)}
+      </div>
+    </div>
+  </div>
+
+  <div class="lists">
+    <div>
+      <h3 class="list-h">{t('about.expH')}</h3>
+      <ol class="tl">
+        {
+          d.about.timeline.map((e) => (
+            <li>
+              <span class="y">
+                <span class="tick" aria-hidden="true" />
+                {e.y}
+              </span>
+              <div class="body">
+                <span class="org">{e.org}</span>
+                <span class="place">{e.place}</span>
+                <span class="d">{e.d}</span>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+    <div>
+      <h3 class="list-h">{t('about.eduH')}</h3>
+      <ol class="tl">
+        {
+          d.about.education.map((e) => (
+            <li>
+              <span class="y">
+                <span class="tick" aria-hidden="true" />
+                {e.y}
+              </span>
+              <div class="body">
+                <span class="org">{e.org}</span>
+                <span class="edu-d">{e.d}</span>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .top {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: 40px clamp(32px, 5vw, 72px);
+    margin-top: 16px;
+    align-items: start;
+  }
+  .photo-frame {
+    max-width: 460px;
+    width: 100%;
+  }
+  .photo {
+    aspect-ratio: 4 / 5;
+    display: flex;
+    align-items: flex-end;
+    padding: 16px;
+  }
+  .bio {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 620px;
+  }
+  .title {
+    margin: 0 0 8px;
+  }
+  .bio > p {
+    font-size: 18px;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+  .langs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 32px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .langs h3 {
+    width: 100%;
+  }
+  .langs span {
+    font-weight: 600;
+  }
+  .lists {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+    gap: 48px clamp(32px, 5vw, 72px);
+    margin-top: clamp(48px, 6vw, 80px);
+  }
+  .list-h {
+    margin: 0 0 16px;
+    font-weight: 800;
+    font-stretch: 112%;
+    font-size: 22px;
+  }
+  .tl {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .tl li {
+    display: grid;
+    grid-template-columns: minmax(96px, 120px) minmax(0, 1fr);
+    gap: 16px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+  }
+  .y {
+    font-size: 14px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    gap: 8px;
+  }
+  .tick {
+    width: 2px;
+    height: 1em;
+    flex: none;
+    margin-top: 0.25em;
+    background: var(--red);
+  }
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .org {
+    font-weight: 800;
+    font-stretch: 110%;
+    font-size: 17px;
+  }
+  .place {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .d {
+    font-size: 15px;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+  .edu-d {
+    font-size: 15px;
+  }
+</style>

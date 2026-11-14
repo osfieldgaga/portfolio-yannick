@@ -1,0 +1,57 @@
+---
+import SectionHead from '../SectionHead.astro';
+import { useT, type Lang } from '../../i18n';
+import { sectionId } from '../../i18n/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { t, d } = useT(lang);
+---
+
+<section id={sectionId(lang, 'tools')} class="block" aria-labelledby="tools-title">
+  <SectionHead index="04 / 05" kicker={t('tools.kicker')} />
+  <h2 id="tools-title" class="h-section title">{t('tools.title')}</h2>
+  <div class="groups">
+    {
+      d.tools.groups.map((g) => (
+        <div>
+          <h3 class="label">{g.t}</h3>
+          <ul>
+            {g.items.map((i) => (
+              <li>{i}</li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .title {
+    margin: 16px 0 40px;
+    text-wrap: initial;
+  }
+  .groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 32px 24px;
+  }
+  h3 {
+    margin: 0 0 4px;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 17px;
+    font-weight: 600;
+  }
+</style>

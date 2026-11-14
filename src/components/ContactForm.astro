@@ -1,0 +1,124 @@
+---
+/**
+ * Contact form (markup and styles from the design). Phase 4 adds client-side
+ * validation and the Web3Forms submission script. Without JavaScript the form
+ * still posts to Web3Forms directly.
+ */
+import { site } from '../site.config';
+import { useT, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { t, d } = useT(lang);
+---
+
+<form class="form" action="https://api.web3forms.com/submit" method="POST" novalidate aria-labelledby="form-title" data-contact-form>
+  <h3 id="form-title" class="label">{t('contact.formH')}</h3>
+
+  <input type="hidden" name="access_key" value={site.web3formsKey} />
+  <input type="hidden" name="subject" value={`yannickbamona.com — ${t('contact.formH')}`} />
+  <input type="hidden" name="from_name" value="yannickbamona.com" />
+  <!-- Honeypot: real visitors never see or fill this field -->
+  <div class="hp" aria-hidden="true">
+    <label for="f-botcheck">{t('contact.honeypot')}</label>
+    <input id="f-botcheck" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label for="f-name">{t('contact.name')} <span class="req" aria-hidden="true">*</span></label>
+      <input id="f-name" name="name" type="text" autocomplete="name" required class="input" />
+      <p id="err-name" class="err" hidden></p>
+    </div>
+    <div class="field">
+      <label for="f-email">{t('contact.email')} <span class="req" aria-hidden="true">*</span></label>
+      <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required class="input" />
+      <p id="err-email" class="err" hidden></p>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="f-type">{t('contact.type')} <span class="req" aria-hidden="true">*</span></label>
+    <select id="f-type" name="project_type" required class="input">
+      <option value="">{t('contact.choose')}</option>
+      {d.contact.types.map((o) => <option value={o}>{o}</option>)}
+    </select>
+    <p id="err-type" class="err" hidden></p>
+  </div>
+
+  <div class="field">
+    <label for="f-msg">{t('contact.msg')} <span class="req" aria-hidden="true">*</span></label>
+    <p id="hint-msg" class="hint">{t('contact.msgHint')}</p>
+    <textarea id="f-msg" name="message" rows="5" required class="input" aria-describedby="hint-msg"></textarea>
+    <p id="err-msg" class="err" hidden></p>
+  </div>
+
+  <div class="foot">
+    <p class="req-note"><span class="req" aria-hidden="true">*</span> {t('contact.req')}</p>
+    <button type="submit" class="btn btn-primary submit">
+      {t('contact.send')}
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+    </button>
+  </div>
+</form>
+
+<style>
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 20px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  label {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .req {
+    color: var(--red);
+  }
+  .hint {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .err {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--link);
+  }
+  select.input {
+    color: var(--ink);
+  }
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .req-note {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .submit {
+    padding: 0 22px;
+  }
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+</style>

@@ -1,0 +1,90 @@
+---
+import '../styles/fonts.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import SEO from '../components/SEO.astro';
+import HudFrame from '../components/HudFrame.astro';
+import LangBanner from '../components/LangBanner.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../site.config';
+import { useT, type Lang } from '../i18n';
+import type { Alternates } from '../i18n/routes';
+
+interface Props {
+  lang: Lang;
+  /** Page title without the " | Yannick Bamona" suffix; omit on the homepage. */
+  title?: string;
+  description: string;
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article' | 'profile';
+  /** URL of this page in each language (drives hreflang, canonical and the language switcher). */
+  alternates: Alternates;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const { lang, alternates, ...seo } = Astro.props;
+const { t } = useT(lang);
+---
+
+<!doctype html>
+<html lang={lang} data-frame={site.hud.frame ? 'on' : 'off'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Set the theme before first paint: saved choice, else the OS setting. -->
+    <script is:inline>
+      (function () {
+        var t;
+        try { t = localStorage.getItem('yb-theme'); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.style.colorScheme = t;
+      })();
+    </script>
+    <meta name="theme-color" content="#f4f3f1" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b0d10" media="(prefers-color-scheme: dark)" />
+    <link rel="preload" href="/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <SEO lang={lang} alternates={alternates} {...seo} />
+    <slot name="head" />
+    {
+      site.cloudflareAnalyticsToken && (
+        <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: site.cloudflareAnalyticsToken })} />
+      )
+    }
+  </head>
+  <body id="top">
+    {site.hud.frame && <HudFrame />}
+    <a class="skip-link" href="#main">{t('nav.skip')}</a>
+    <LangBanner lang={lang} alternates={alternates} />
+    <Header lang={lang} alternates={alternates} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 8px;
+    z-index: 300;
+    background: var(--ink);
+    color: var(--bg);
+    padding: 10px 16px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .skip-link:focus {
+    left: 8px;
+    color: var(--bg);
+  }
+  main {
+    outline: none;
+  }
+</style>

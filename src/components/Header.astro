@@ -1,0 +1,334 @@
+---
+import Icon from './Icon.astro';
+import { useT, LANGS, type Lang } from '../i18n';
+import { pages, sectionHref, type Alternates } from '../i18n/routes';
+
+interface Props {
+  lang: Lang;
+  alternates: Alternates;
+}
+
+const { lang, alternates } = Astro.props;
+const { t } = useT(lang);
+
+const navItems = [
+  { href: sectionHref(lang, 'work'), label: t('nav.work'), num: '01' },
+  { href: sectionHref(lang, 'services'), label: t('nav.services'), num: '02' },
+  { href: sectionHref(lang, 'about'), label: t('nav.about'), num: '03' },
+  { href: sectionHref(lang, 'contact'), label: t('nav.contact'), num: '05' },
+];
+
+// Design order: EN | FR
+const langLinks = [...LANGS].reverse().map((l) => ({
+  lang: l,
+  label: l.toUpperCase(),
+  href: alternates[l],
+  current: l === lang,
+  title: useT(l).t('nav.switchTo'),
+}));
+---
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href={pages.home[lang]} aria-label={t('nav.home')}>
+      <span class="logo" aria-hidden="true"><span>YB</span></span>
+      <span class="brand-name">Yannick Bamona</span>
+    </a>
+
+    <nav class="nav-wide" aria-label={t('nav.main')}>
+      {navItems.map((n) => <a href={n.href}>{n.label}</a>)}
+    </nav>
+
+    <div class="actions">
+      <div class="lang" role="group" aria-label={t('nav.langGroup')}>
+        {
+          langLinks.map((l) =>
+            l.current ? (
+              <a href={l.href} lang={l.lang} hreflang={l.lang} aria-current="true" class="is-current">
+                {l.label}
+              </a>
+            ) : (
+              <a href={l.href} lang={l.lang} hreflang={l.lang} title={l.title} data-set-lang={l.lang}>
+                <span class="sr-only">{l.title} — </span>
+                {l.label}
+              </a>
+            ),
+          )
+        }
+      </div>
+
+      <button
+        type="button"
+        class="icon-btn theme-toggle"
+        data-theme-toggle
+        data-label-to-dark={t('nav.toDark')}
+        data-label-to-light={t('nav.toLight')}
+        aria-label={t('nav.toDark')}
+        title={t('nav.toDark')}>
+        <Icon name="moon" size={18} class="i-moon" />
+        <Icon name="sun" size={18} class="i-sun" />
+      </button>
+
+      <button
+        type="button"
+        class="icon-btn burger"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label={t('nav.menu')}
+        data-menu-toggle
+        data-label-open={t('nav.menu')}
+        data-label-close={t('nav.close')}>
+        <Icon name="menu" size={18} class="i-menu" />
+        <Icon name="close" size={18} class="i-close" />
+      </button>
+    </div>
+  </div>
+
+  <nav id="mobile-menu" class="nav-mobile" aria-label={t('nav.main')} hidden>
+    {
+      navItems.map((n) => (
+        <a href={n.href}>
+          <span>{n.label}</span>
+          <span class="num" aria-hidden="true">
+            {n.num}
+          </span>
+        </a>
+      ))
+    }
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding-top: var(--head-pad);
+  }
+  .bar {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 var(--pad-x);
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .brand:hover {
+    color: var(--ink);
+  }
+  .logo {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    background: var(--red);
+    clip-path: polygon(9px 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%, 0 9px);
+  }
+  .logo span {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    background: var(--bg);
+    clip-path: polygon(8.5px 0, 100% 0, 100% calc(100% - 8.5px), calc(100% - 8.5px) 100%, 0 100%, 0 8.5px);
+    font-weight: 800;
+    font-stretch: 125%;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+  }
+  .brand-name {
+    font-weight: 700;
+    font-stretch: 112%;
+    font-size: 15px;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  .nav-wide {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .nav-wide a {
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .nav-wide a:hover {
+    border-bottom-color: var(--red);
+    color: var(--ink);
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .lang {
+    display: flex;
+    border: 1px solid var(--line-strong);
+  }
+  .lang a {
+    min-width: 40px;
+    min-height: 40px;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    background: transparent;
+    color: var(--ink);
+  }
+  .lang a + a {
+    border-left: 1px solid var(--line-strong);
+  }
+  .lang a:hover {
+    color: var(--ink);
+    background: color-mix(in srgb, var(--ink) 7%, transparent);
+  }
+  .lang a.is-current,
+  .lang a.is-current:hover {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .lang a:focus-visible {
+    outline-offset: -2px;
+  }
+
+  /* Theme icon: moon in light mode (switch to dark), sun in dark mode */
+  .theme-toggle :global(.i-sun) {
+    display: none;
+  }
+  :global(:root[data-theme='dark']) .theme-toggle :global(.i-sun) {
+    display: block;
+  }
+  :global(:root[data-theme='dark']) .theme-toggle :global(.i-moon) {
+    display: none;
+  }
+
+  .burger {
+    display: none;
+  }
+  .burger :global(.i-close) {
+    display: none;
+  }
+  .burger[aria-expanded='true'] :global(.i-close) {
+    display: block;
+  }
+  .burger[aria-expanded='true'] :global(.i-menu) {
+    display: none;
+  }
+
+  .nav-mobile {
+    border-top: 1px solid var(--line);
+    padding: 8px var(--pad-x) 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .nav-mobile a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 52px;
+    border-bottom: 1px solid var(--line);
+    font-size: 20px;
+    font-weight: 700;
+    font-stretch: 115%;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-mobile .num {
+    font-size: 12px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Design breakpoint: 860px */
+  @media (max-width: 859.98px) {
+    .nav-wide {
+      display: none;
+    }
+    .burger {
+      display: grid;
+    }
+  }
+  /* At phone widths the name + EN/FR + theme + menu don't fit on one row
+     (the reference overflows at 390px); keep the YB mark only. */
+  @media (max-width: 419.98px) {
+    .brand-name {
+      display: none;
+    }
+  }
+  @media (min-width: 860px) {
+    .nav-mobile {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  import { getTheme, setTheme } from '../scripts/prefs';
+
+  // Theme toggle
+  const themeBtn = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  const syncThemeLabel = () => {
+    if (!themeBtn) return;
+    const label = getTheme() === 'dark' ? themeBtn.dataset.labelToLight! : themeBtn.dataset.labelToDark!;
+    themeBtn.setAttribute('aria-label', label);
+    themeBtn.title = label;
+  };
+  syncThemeLabel();
+  themeBtn?.addEventListener('click', () => {
+    setTheme(getTheme() === 'dark' ? 'light' : 'dark');
+    syncThemeLabel();
+  });
+
+  // Remember an explicit language choice (used only by the suggestion banner)
+  document.querySelectorAll<HTMLAnchorElement>('[data-set-lang]').forEach((a) =>
+    a.addEventListener('click', () => {
+      try {
+        localStorage.setItem('yb-lang', a.dataset.setLang!);
+      } catch {}
+    }),
+  );
+
+  // Mobile menu
+  const menuBtn = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.getElementById('mobile-menu');
+  if (menuBtn && menu) {
+    const setOpen = (open: boolean, returnFocus = false) => {
+      menu.hidden = !open;
+      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtn.setAttribute('aria-label', open ? menuBtn.dataset.labelClose! : menuBtn.dataset.labelOpen!);
+      if (!open && returnFocus) menuBtn.focus();
+    };
+    menuBtn.addEventListener('click', () => setOpen(menu.hasAttribute('hidden')));
+    menu.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) setOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.hidden) setOpen(false, true);
+    });
+    matchMedia('(min-width: 860px)').addEventListener('change', (e) => {
+      if (e.matches) setOpen(false);
+    });
+  }
+</script>

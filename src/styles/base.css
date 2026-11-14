@@ -1,0 +1,357 @@
+/*
+ * Base styles and shared HUD patterns. Values mirror the inline styles in
+ * design-reference/…/Portfolio.dc.html and the Modernist styles.css it imports.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* HUD frame gutters */
+  padding: 0 var(--gut) var(--gut);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+picture {
+  display: contents;
+}
+
+figure {
+  margin: 0;
+}
+
+a:not(.btn) {
+  color: var(--link);
+  text-underline-offset: 3px;
+}
+
+a:not(.btn):hover {
+  color: var(--red);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* — utilities — */
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.container {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding-inline: var(--pad-x);
+}
+
+/* A home-page section: red rule, kicker, heading. */
+.block {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: clamp(72px, 9vw, 128px) var(--pad-x) 0;
+  scroll-margin-top: var(--header-h);
+}
+
+/* Red rule ending in a dot */
+.rule {
+  display: flex;
+  align-items: center;
+}
+.rule::before {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--red);
+}
+.rule::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+}
+
+/* "/// 01 / 05  SELECTED WORK" */
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.slashes {
+  color: var(--red);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+/* Small uppercase label used for h3 group titles, dt, form heading… */
+.label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.h-section {
+  font-weight: 800;
+  font-stretch: 118%;
+  font-size: clamp(30px, 4.4vw, 56px);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.h-card {
+  font-weight: 800;
+  font-stretch: 112%;
+  font-size: 21px;
+  line-height: 1.15;
+}
+
+/* Diagonal hatching used for "image to come" placeholders */
+.hatch {
+  background: var(--bg) repeating-linear-gradient(135deg, var(--surface) 0 1px, transparent 1px 12px);
+}
+
+.hatch-label {
+  font-size: 13px;
+  background: var(--bg);
+  padding: 2px 6px;
+  color: var(--muted);
+}
+
+/*
+ * Notched frames: a 1px border drawn by an outer box with padding:1px and a
+ * matching clip-path on the inner box. Corner size via --c on .notch.
+ *   <div class="notch notch-tl" style="--c:16px"><div class="notch-in">…</div></div>
+ */
+.notch {
+  --c: 16px;
+  --k: var(--c);
+  background: var(--notch-line, var(--line-strong));
+  padding: 1px;
+  transition: background 0.2s;
+}
+.notch-in {
+  --k: calc(var(--c) - 0.4px);
+}
+.notch-tl,
+.notch-tl > .notch-in {
+  clip-path: polygon(var(--k) 0, 100% 0, 100% 100%, 0 100%, 0 var(--k));
+}
+.notch-tr,
+.notch-tr > .notch-in {
+  clip-path: polygon(0 0, calc(100% - var(--k)) 0, 100% var(--k), 100% 100%, 0 100%);
+}
+.notch-br,
+.notch-br > .notch-in {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--k)), calc(100% - var(--k)) 100%, 0 100%);
+}
+.notch-tlbr,
+.notch-tlbr > .notch-in {
+  clip-path: polygon(var(--k) 0, 100% 0, 100% calc(100% - var(--k)), calc(100% - var(--k)) 100%, 0 100%, 0 var(--k));
+}
+.notch-soft {
+  --notch-line: var(--line);
+}
+
+/* Image buttons that open the lightbox */
+.zoom {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  color: inherit;
+  text-align: left;
+}
+.zoom:hover .notch,
+.zoom:focus-visible .notch {
+  --notch-line: var(--red);
+}
+
+/* — buttons (Modernist .btn, with the sizes used throughout the design) — */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 20px;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font);
+  font-weight: 800;
+  font-size: 15px;
+  line-height: 1.2;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0;
+}
+.btn svg {
+  display: block;
+  flex: none;
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+}
+.btn-primary:hover {
+  background: var(--accent-600);
+}
+.btn-primary:active {
+  background: var(--accent-700);
+}
+.btn-secondary {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+.btn-secondary:hover {
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+}
+.btn-secondary:active {
+  background: color-mix(in srgb, var(--ink) 14%, transparent);
+}
+.btn-sm {
+  min-height: 44px;
+  padding: 0 16px;
+}
+
+/* Square icon buttons in the header */
+.icon-btn {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+  cursor: pointer;
+  padding: 0;
+}
+.icon-btn:hover {
+  border-color: var(--red);
+}
+
+/* — form fields (Modernist .input) — */
+.input {
+  width: 100%;
+  min-height: 48px;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 16px;
+  color: var(--ink);
+  caret-color: var(--accent);
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+}
+.input:hover {
+  border-color: color-mix(in srgb, var(--ink) 45%, transparent);
+}
+.input:focus-visible {
+  border-color: var(--accent);
+  outline-offset: 0;
+}
+.input[aria-invalid='true'] {
+  border-color: var(--red);
+}
+textarea.input {
+  min-height: 140px;
+  resize: vertical;
+}

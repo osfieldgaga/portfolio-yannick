@@ -1,0 +1,168 @@
+{
+  "langName": "English",
+  "meta": {
+    "siteTitle": "Yannick Bamona — Graphic Designer · Illustrator",
+    "homeDescription": "Yannick Bamona, graphic designer and illustrator in Cotonou, Benin. Logos, brand identities, campaign posters, illustration and video editing.",
+    "aboutTitle": "About",
+    "aboutDescription": "Graphic designer and illustrator based in Cotonou, trained at Studio M in Casablanca. Logos, brand charters and posters for agencies in Benin since 2016.",
+    "servicesTitle": "Services",
+    "servicesDescription": "Brand identity, campaign posters, illustration and video editing, in French and English, for clients in Benin and abroad.",
+    "contactTitle": "Contact",
+    "contactDescription": "Have a logo, campaign or poster to make? Reach Yannick Bamona by email, WhatsApp or the contact form.",
+    "notFoundTitle": "Page not found",
+    "notFoundDescription": "This page doesn’t exist or has moved.",
+    "ogLocale": "en_US"
+  },
+  "nav": {
+    "main": "Main navigation",
+    "home": "Yannick Bamona — home",
+    "work": "Work",
+    "services": "Services",
+    "about": "About",
+    "contact": "Contact",
+    "skip": "Skip to content",
+    "menu": "Open menu",
+    "close": "Close menu",
+    "toDark": "Switch to dark mode",
+    "toLight": "Switch to light mode",
+    "langGroup": "Language",
+    "switchTo": "Read this page in English"
+  },
+  "banner": {
+    "available": "This page is also available in English.",
+    "read": "Read in English",
+    "dismiss": "Hide this message"
+  },
+  "hero": {
+    "hud": "Portfolio 2026",
+    "role": "Graphic Designer · Illustrator",
+    "line": "I design logos, brand identities and campaign posters that help businesses get noticed and remembered, and I illustrate the rest, from pencil sketch to finished artwork.",
+    "loc": "Cotonou, Benin · available remotely",
+    "view": "View work",
+    "touch": "Get in touch",
+    "figLabel": "Fig. 01 — Featured"
+  },
+  "work": {
+    "kicker": "Selected work",
+    "title": "Client work first, sketchbook last.",
+    "intro": "Logos, identities and campaigns for clients in Benin and Ghana, followed by illustration and pages from the sketchbook.",
+    "filterLabel": "Filter projects by category",
+    "all": "All",
+    "caseLink": "Read the case study",
+    "soon": "Image to come",
+    "open": "Open {t} in the viewer",
+    "showing": "Showing {n} projects",
+    "imageCount": "{i} / {n}"
+  },
+  "categories": {
+    "brand-identity": "Brand Identity",
+    "campaigns-posters": "Campaigns & Posters",
+    "illustration": "Illustration",
+    "3d-motion": "3D & Motion",
+    "sketchbook": "Sketchbook"
+  },
+  "services": {
+    "kicker": "Services",
+    "title": "What I can do for you",
+    "areaServed": "Benin and remote",
+    "items": [
+      { "t": "Brand identity", "d": "Logos, colour and type choices, variations and a simple brand charter your team can actually use.", "tools": "Illustrator · Photoshop · InDesign" },
+      { "t": "Campaign posters", "d": "Print and social posters for launches, events and weekly programmes, in every format the campaign needs.", "tools": "Photoshop · Illustrator" },
+      { "t": "Illustration", "d": "Portraits, mascots, scenes and patterns, from pencil sketch to finished digital artwork.", "tools": "Pencil · Photoshop · Illustrator" },
+      { "t": "Video editing", "d": "Promo edits, event films and motion graphics for social media and screens.", "tools": "Premiere Pro · After Effects" }
+    ]
+  },
+  "about": {
+    "kicker": "About",
+    "title": "Ten years of agency and client work.",
+    "photo": "Portrait of Yannick Bamona — photo to come",
+    "bio1": "I’m Yannick Bamona, a graphic designer and illustrator based in Cotonou. I studied graphic design at Studio M in Casablanca, and since 2016 I’ve designed logos, brand charters and campaign posters for agencies in Benin and their clients, from an insurer to a menswear brand to Canal+.",
+    "bio2": "I start from the client’s problem: who needs to notice the brand, where they will see it, and what they should remember. Drawing is how I think, so most projects begin in pencil before they become vectors.",
+    "expH": "Experience",
+    "eduH": "Education",
+    "langH": "Languages",
+    "langs": ["French — native", "English — fluent"],
+    "timeline": [
+      { "y": "2023 – 2025", "org": "Le Groupe Monarch", "place": "Digital communication agency · Cotonou", "d": "Logos, variations and brand charters; campaign posters for Men In Suits (Ghana) and LB Assur." },
+      { "y": "2022 – now", "org": "Freelance", "place": "Cotonou and remote", "d": "Logos for Idylle Déco and Pastry’s House; video editing for a gala event in Morocco, for Aidreve, and three films with director Le Kipré." },
+      { "y": "2018", "org": "ATL S.A", "place": "Communication and events agency · Cotonou", "d": "Posters for a seaside resort, logos for several clients, audiovisual planning for a large public event." },
+      { "y": "2016 – 2017", "org": "Atelier Paon", "place": "Creative agency · Cotonou", "d": "Weekly posters for Canal+, the agency mascot, and logos for clients." }
+    ],
+    "education": [
+      { "y": "2019 – 2022", "org": "Studio M, Casablanca", "d": "Graphic design" },
+      { "y": "2015", "org": "ETAP — École Technique d’Art Plastique, Casablanca", "d": "Infographics" }
+    ]
+  },
+  "tools": {
+    "kicker": "Tools",
+    "title": "What I work with",
+    "groups": [
+      { "t": "Design", "items": ["Adobe Illustrator", "Adobe Photoshop", "Adobe InDesign"] },
+      { "t": "Video & motion", "items": ["Adobe Premiere Pro", "Adobe After Effects"] },
+      { "t": "By hand", "items": ["Pencil and paper"] }
+    ]
+  },
+  "contact": {
+    "kicker": "Contact",
+    "title": "Have a logo, campaign or poster to make?",
+    "intro": "Tell me what you need and when you need it. I work in French and English, with clients in Benin and abroad.",
+    "formH": "Send a message",
+    "name": "Name",
+    "email": "Email",
+    "type": "Project type",
+    "choose": "Choose one",
+    "types": ["Logo / brand identity", "Campaign or poster", "Illustration", "Video editing", "Full-time or agency role", "Something else"],
+    "msg": "Message",
+    "msgHint": "A few lines on the project, the timing and a budget if you have one.",
+    "send": "Send message",
+    "sending": "Sending…",
+    "req": "Required field",
+    "honeypot": "Leave this field empty",
+    "errName": "Enter your name.",
+    "errEmail": "Enter your email address.",
+    "errEmailF": "Enter an email address in the format name@example.com.",
+    "errType": "Choose a project type.",
+    "errMsg": "Write a few words about the project (at least 10 characters).",
+    "summary1": "One field needs your attention.",
+    "summaryN": "{n} fields need your attention.",
+    "errSend": "The message couldn’t be sent. Try again, or email {email} directly.",
+    "sentT": "Message sent.",
+    "sentB": "Thank you, {name}. I’ll reply by email soon.",
+    "again": "Send another message",
+    "wa": "Chat on WhatsApp",
+    "waMessage": "Hello Yannick, I’m contacting you from your website yannickbamona.com.",
+    "cv": "Download CV (PDF)",
+    "elsewhere": "Elsewhere",
+    "newTab": "(opens in a new tab)"
+  },
+  "footer": {
+    "note": "© {year} Yannick Bamona · yannickbamona.com",
+    "top": "Back to top"
+  },
+  "case": {
+    "back": "All work",
+    "kicker": "Case study",
+    "client": "Client",
+    "year": "Year",
+    "role": "Role",
+    "tools": "Tools",
+    "nextH": "Need a logo that works everywhere?",
+    "nextB": "I can take your brand from the first sketch to final files.",
+    "nextCta": "Start a project",
+    "onlyOther": "Available in French only: the text below hasn’t been translated yet.",
+    "breadcrumbHome": "Home",
+    "breadcrumbWork": "Work"
+  },
+  "lb": {
+    "label": "Image viewer",
+    "close": "Close viewer",
+    "prev": "Previous image",
+    "next": "Next image"
+  },
+  "notFound": {
+    "kicker": "Error 404",
+    "title": "Page not found",
+    "body": "This page doesn’t exist or has moved.",
+    "home": "Back to the homepage"
+  }
+}

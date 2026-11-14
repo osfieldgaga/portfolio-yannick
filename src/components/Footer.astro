@@ -1,0 +1,49 @@
+---
+import Icon from './Icon.astro';
+import { useT, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const { t } = useT(lang);
+---
+
+<footer class="site-footer">
+  <div class="inner">
+    <span>{t('footer.note', { year: new Date().getFullYear() })}</span>
+    <a href="#top">{t('footer.top')}<Icon name="arrow-up" size={14} stroke="var(--red)" /></a>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line);
+  }
+  .inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 24px var(--pad-x);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    flex: none;
+  }
+  a:hover {
+    color: var(--link);
+  }
+</style>

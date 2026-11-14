@@ -1,0 +1,143 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import ContactForm from '../ContactForm.astro';
+import { site } from '../../site.config';
+import { useT, type Lang } from '../../i18n';
+import { sectionId } from '../../i18n/routes';
+
+interface Props {
+  lang: Lang;
+  headingLevel?: 'h1' | 'h2';
+}
+
+const { lang, headingLevel = 'h2' } = Astro.props;
+const { t } = useT(lang);
+const H = headingLevel;
+const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(t('contact.waMessage'))}`;
+---
+
+<section id={sectionId(lang, 'contact')} class="block contact" aria-labelledby="contact-title">
+  <SectionHead index="05 / 05" kicker={t('contact.kicker')} />
+  <div class="cols">
+    <div class="info">
+      <H id="contact-title" class="h-section">{t('contact.title')}</H>
+      <p class="intro">{t('contact.intro')}</p>
+      <a class="email" href={`mailto:${site.email}`}>{site.email}</a>
+      <div class="ctas">
+        <a href={waHref} target="_blank" rel="noopener" class="btn btn-primary">
+          <Icon name="whatsapp" size={18} />
+          {t('contact.wa')}
+          <span class="sr-only">{t('contact.newTab')}</span>
+        </a>
+        <a href={site.cv[lang]} download class="btn btn-secondary">
+          <Icon name="download" size={18} />
+          {t('contact.cv')}
+        </a>
+      </div>
+      <div class="elsewhere">
+        <h3 class="label">{t('contact.elsewhere')}</h3>
+        <ul>
+          {
+            site.socials.map((s) => (
+              <li>
+                <a href={s.href} target="_blank" rel="noopener me">
+                  {s.label}
+                  <span class="sr-only">{t('contact.newTab')}</span>
+                  <Icon name="arrow-up-right" size={14} stroke="var(--red)" />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="notch notch-tr" style="--c:20px">
+      <div class="notch-in panel">
+        <ContactForm lang={lang} />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    padding-bottom: clamp(72px, 9vw, 128px);
+  }
+  .cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+    gap: 48px clamp(32px, 5vw, 80px);
+    margin-top: 16px;
+    align-items: start;
+  }
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .intro {
+    font-size: 18px;
+    max-width: 440px;
+    text-wrap: pretty;
+  }
+  .email {
+    font-size: clamp(20px, 2.4vw, 28px);
+    font-weight: 700;
+    font-stretch: 108%;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--red);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+    align-self: flex-start;
+  }
+  .email:hover {
+    color: var(--ink);
+    text-decoration-color: var(--ink);
+  }
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .ctas .btn {
+    padding: 0 18px;
+  }
+  .elsewhere {
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  .elsewhere h3 {
+    margin: 0 0 4px;
+  }
+  .elsewhere ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 28px;
+  }
+  .elsewhere a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .elsewhere a:hover {
+    color: var(--link);
+    text-decoration: underline;
+  }
+  .panel {
+    background: var(--bg);
+    padding: clamp(20px, 3vw, 36px);
+  }
+</style>

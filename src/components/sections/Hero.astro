@@ -1,0 +1,238 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from '../Icon.astro';
+import { site } from '../../site.config';
+import { useT, pad2, type Lang } from '../../i18n';
+import { sectionHref } from '../../i18n/routes';
+import type { ProjectCardData } from '../../lib/projects';
+
+interface Props {
+  lang: Lang;
+  featured?: ProjectCardData;
+  /** Total number of projects, for the "01 / 13" counter. */
+  total: number;
+}
+
+const { lang, featured, total } = Astro.props;
+const { t } = useT(lang);
+const backdrop = site.hud.heroBackdrop;
+const showGrid = backdrop === 'grid' || backdrop === 'grid+stars';
+const showStars = backdrop === 'stars' || backdrop === 'grid+stars';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  {showGrid && <div class="bg-grid" aria-hidden="true" />}
+  {showStars && <div class="bg-stars" aria-hidden="true" />}
+  <div class="inner">
+    <div class="hud" aria-hidden="true">
+      <span class="hud-l"><span class="slashes">///</span><span>YB—{t('hero.hud')}</span></span>
+      <span class="hud-r">{site.location.hud}</span>
+    </div>
+
+    <h1 id="hero-title">Yannick<br />Bamona</h1>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <div class="cols">
+      <div class="intro">
+        <p class="role">{t('hero.role')}</p>
+        <p class="line">{t('hero.line')}</p>
+        <p class="loc"><span class="dot" aria-hidden="true"></span>{t('hero.loc')}</p>
+        <div class="ctas">
+          <a href={sectionHref(lang, 'work')} class="btn btn-primary">{t('hero.view')}<Icon name="arrow-down" /></a>
+          <a href={sectionHref(lang, 'contact')} class="btn btn-secondary">{t('hero.touch')}<Icon name="arrow-right" /></a>
+        </div>
+      </div>
+
+      {
+        featured?.cover && (
+          <figure class="feature">
+            <div class="fig-label" aria-hidden="true">
+              <span>{t('hero.figLabel')}</span>
+              <span class="slashes-red">///</span>
+            </div>
+            <button
+              type="button"
+              class="zoom"
+              data-lightbox-open={featured.slug}
+              aria-label={t('work.open', { t: featured.title })}>
+              <div class="notch notch-br" style="--c:18px">
+                <div class="notch-in shot" style={`background:${featured.coverBg}`}>
+                  <Picture
+                    src={featured.cover.src}
+                    alt={featured.cover.alt}
+                    formats={['avif', 'webp']}
+                    widths={[480, 640, 960, 1280].filter((w) => w <= featured.cover!.src.width)}
+                    sizes="(min-width: 900px) 600px, 100vw"
+                    loading="eager"
+                    fetchpriority="high"
+                  />
+                </div>
+              </div>
+            </button>
+            <figcaption>
+              <span>
+                {featured.title} — {featured.summary.charAt(0).toLowerCase() + featured.summary.slice(1)}
+              </span>
+              <span aria-hidden="true" class="count">
+                01 / {pad2(total)}
+              </span>
+            </figcaption>
+          </figure>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+  .bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 56px 56px;
+    background-position: -1px -1px;
+    -webkit-mask-image: linear-gradient(180deg, #000 30%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 30%, transparent 100%);
+  }
+  .bg-stars {
+    position: absolute;
+    inset: 0;
+    opacity: var(--stars);
+    background-image: radial-gradient(1.2px 1.2px at 8% 22%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 19% 64%, #fff 50%, transparent 51%),
+      radial-gradient(1.4px 1.4px at 31% 12%, #cfe2ff 50%, transparent 51%), radial-gradient(1px 1px at 44% 40%, #fff 50%, transparent 51%),
+      radial-gradient(1.2px 1.2px at 57% 18%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 66% 72%, #fff 50%, transparent 51%),
+      radial-gradient(1.6px 1.6px at 78% 30%, #ffd9d9 50%, transparent 51%), radial-gradient(1px 1px at 86% 58%, #fff 50%, transparent 51%),
+      radial-gradient(1.2px 1.2px at 93% 14%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 12% 86%, #fff 50%, transparent 51%),
+      radial-gradient(1px 1px at 51% 88%, #fff 50%, transparent 51%), radial-gradient(1.2px 1.2px at 72% 48%, #fff 50%, transparent 51%);
+  }
+  .inner {
+    position: relative;
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: clamp(28px, 5vw, 56px) var(--pad-x) clamp(48px, 7vw, 96px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 4vw, 40px);
+  }
+  .hud {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .hud-l {
+    display: flex;
+    gap: 10px;
+    white-space: nowrap;
+  }
+  .hud-r {
+    white-space: nowrap;
+  }
+  h1 {
+    font-weight: 800;
+    font-stretch: 125%;
+    font-size: clamp(48px, 10.4vw, 156px);
+    line-height: 0.88;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+  .cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    gap: clamp(32px, 5vw, 64px);
+    align-items: start;
+  }
+  .intro {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 560px;
+  }
+  .role {
+    font-weight: 700;
+    font-stretch: 112%;
+    font-size: clamp(18px, 2vw, 22px);
+    letter-spacing: 0.01em;
+  }
+  .line {
+    font-size: clamp(18px, 1.9vw, 21px);
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+  .loc {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--red) 20%, transparent);
+  }
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 4px;
+  }
+
+  .feature {
+    display: flex;
+    flex-direction: column;
+  }
+  .fig-label {
+    background: var(--silver);
+    color: var(--silver-ink);
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 12px 6px 22px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    clip-path: polygon(14px 0, 100% 0, 100% 100%, 0 100%, 0 14px);
+  }
+  .slashes-red {
+    color: var(--red);
+  }
+  .shot {
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .shot :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  figcaption {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .count {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+</style>

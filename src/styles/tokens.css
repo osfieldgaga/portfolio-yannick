@@ -1,0 +1,101 @@
+/*
+ * Design tokens — taken from design-reference/…/Portfolio.dc.html ([data-yb-root])
+ * and the Modernist design system it imports. Light is the default; dark is
+ * applied by data-theme="dark" on <html> (set before paint by the inline script
+ * in BaseLayout), or by the OS setting when JavaScript is off.
+ */
+:root {
+  --bg: #f4f3f1;
+  --surface: #e9e7e4;
+  --ink: #1f1d1c;
+  --muted: #5a5653;
+  --line: rgba(31, 29, 28, 0.2);
+  --line-strong: rgba(31, 29, 28, 0.55);
+  --red: #c1121f;
+  --link: #a30f1a;
+  --grid: rgba(31, 29, 28, 0.055);
+  --stars: 0;
+  --silver: linear-gradient(100deg, #c4c6c9 0%, #eeeff0 30%, #b6b9bd 58%, #e3e4e6 100%);
+  --silver-ink: #1f1d1c;
+
+  --accent: #c1121f;
+  --accent-600: #a30f1a;
+  --accent-700: #850c15;
+
+  /* Lightbox is always dark, in both themes */
+  --lb-bg: #08090b;
+  --lb-ink: #e7e5e2;
+  --lb-muted: #a1a6ac;
+  --lb-line: rgba(231, 229, 226, 0.16);
+  --lb-line-strong: rgba(231, 229, 226, 0.35);
+  --lb-red: #e8343d;
+
+  --font: 'Archivo', system-ui, sans-serif;
+  --pad-x: clamp(16px, 4vw, 48px);
+  --max-w: 1280px;
+  --header-h: 64px;
+
+  /* HUD frame gutters (see HudFrame.astro) */
+  --gut: 16px;
+  --gut-bottom: 22px;
+  --head-pad: 20px;
+
+  color-scheme: light;
+}
+
+@media (max-width: 639.98px) {
+  :root {
+    --gut: 10px;
+    --gut-bottom: 16px;
+    --head-pad: 14px;
+  }
+}
+
+:root[data-frame='off'] {
+  --gut: 0px;
+  --gut-bottom: 0px;
+  --head-pad: 0px;
+}
+
+:root[data-theme='dark'] {
+  --bg: #0b0d10;
+  --surface: #14181c;
+  --ink: #e7e5e2;
+  --muted: #a1a6ac;
+  --line: rgba(231, 229, 226, 0.16);
+  --line-strong: rgba(231, 229, 226, 0.42);
+  --red: #e8343d;
+  --link: #ff7d75;
+  --grid: rgba(150, 180, 210, 0.07);
+  --stars: 0.85;
+  --silver: linear-gradient(100deg, #2a2e33 0%, #4a4f56 30%, #292c30 58%, #3d4147 100%);
+  --silver-ink: #e7e5e2;
+
+  --accent: #e8343d;
+  --accent-600: #f2515a;
+  --accent-700: #c71f28;
+
+  color-scheme: dark;
+}
+
+/* No-JS fallback: follow the OS setting when no theme has been set. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #0b0d10;
+    --surface: #14181c;
+    --ink: #e7e5e2;
+    --muted: #a1a6ac;
+    --line: rgba(231, 229, 226, 0.16);
+    --line-strong: rgba(231, 229, 226, 0.42);
+    --red: #e8343d;
+    --link: #ff7d75;
+    --grid: rgba(150, 180, 210, 0.07);
+    --stars: 0.85;
+    --silver: linear-gradient(100deg, #2a2e33 0%, #4a4f56 30%, #292c30 58%, #3d4147 100%);
+    --silver-ink: #e7e5e2;
+    --accent: #e8343d;
+    --accent-600: #f2515a;
+    --accent-700: #c71f28;
+    color-scheme: dark;
+  }
+}

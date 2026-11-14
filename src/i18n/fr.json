@@ -1,0 +1,168 @@
+{
+  "langName": "Français",
+  "meta": {
+    "siteTitle": "Yannick Bamona — Graphiste · Illustrateur",
+    "homeDescription": "Yannick Bamona, graphiste et illustrateur à Cotonou, Bénin. Logos, identités de marque, affiches de campagne, illustration et montage vidéo.",
+    "aboutTitle": "À propos",
+    "aboutDescription": "Graphiste et illustrateur basé à Cotonou, formé au Studio M à Casablanca. Logos, chartes graphiques et affiches pour des agences au Bénin depuis 2016.",
+    "servicesTitle": "Services",
+    "servicesDescription": "Identité de marque, affiches de campagne, illustration et montage vidéo, en français et en anglais, pour des clients au Bénin et à l’étranger.",
+    "contactTitle": "Contact",
+    "contactDescription": "Un logo, une campagne ou une affiche à créer ? Écrivez à Yannick Bamona par e-mail, WhatsApp ou via le formulaire de contact.",
+    "notFoundTitle": "Page introuvable",
+    "notFoundDescription": "Cette page n’existe pas ou a été déplacée.",
+    "ogLocale": "fr_FR"
+  },
+  "nav": {
+    "main": "Navigation principale",
+    "home": "Yannick Bamona — accueil",
+    "work": "Travaux",
+    "services": "Services",
+    "about": "À propos",
+    "contact": "Contact",
+    "skip": "Aller au contenu",
+    "menu": "Ouvrir le menu",
+    "close": "Fermer le menu",
+    "toDark": "Passer en mode sombre",
+    "toLight": "Passer en mode clair",
+    "langGroup": "Langue",
+    "switchTo": "Lire cette page en français"
+  },
+  "banner": {
+    "available": "Cette page existe aussi en français.",
+    "read": "Lire en français",
+    "dismiss": "Masquer ce message"
+  },
+  "hero": {
+    "hud": "Portfolio 2026",
+    "role": "Graphiste · Illustrateur",
+    "line": "Je conçois des logos, des identités de marque et des affiches de campagne qui font remarquer les entreprises et qu’on retient, et j’illustre le reste, du croquis au crayon à l’illustration finale.",
+    "loc": "Cotonou, Bénin · disponible à distance",
+    "view": "Voir les travaux",
+    "touch": "Me contacter",
+    "figLabel": "Fig. 01 — À la une"
+  },
+  "work": {
+    "kicker": "Travaux choisis",
+    "title": "Les clients d’abord, le carnet de croquis ensuite.",
+    "intro": "Logos, identités et campagnes pour des clients au Bénin et au Ghana, puis illustration et pages du carnet de croquis.",
+    "filterLabel": "Filtrer les projets par catégorie",
+    "all": "Tout",
+    "caseLink": "Lire l’étude de cas",
+    "soon": "Image à venir",
+    "open": "Ouvrir {t} dans la visionneuse",
+    "showing": "{n} projets affichés",
+    "imageCount": "{i} / {n}"
+  },
+  "categories": {
+    "brand-identity": "Identité de marque",
+    "campaigns-posters": "Campagnes & affiches",
+    "illustration": "Illustration",
+    "3d-motion": "3D & motion",
+    "sketchbook": "Carnet de croquis"
+  },
+  "services": {
+    "kicker": "Services",
+    "title": "Ce que je peux faire pour vous",
+    "areaServed": "Bénin et à distance",
+    "items": [
+      { "t": "Identité de marque", "d": "Logos, couleurs, typographies, déclinaisons et une charte graphique simple que votre équipe utilisera vraiment.", "tools": "Illustrator · Photoshop · InDesign" },
+      { "t": "Affiches de campagne", "d": "Affiches print et réseaux sociaux pour lancements, événements et programmes hebdomadaires, dans tous les formats nécessaires.", "tools": "Photoshop · Illustrator" },
+      { "t": "Illustration", "d": "Portraits, mascottes, scènes et motifs, du croquis au crayon à l’illustration numérique finale.", "tools": "Crayon · Photoshop · Illustrator" },
+      { "t": "Montage vidéo", "d": "Montages promotionnels, films d’événements et motion design pour les réseaux et les écrans.", "tools": "Premiere Pro · After Effects" }
+    ]
+  },
+  "about": {
+    "kicker": "À propos",
+    "title": "Dix ans d’agence et de projets clients.",
+    "photo": "Portrait de Yannick Bamona — photo à venir",
+    "bio1": "Je suis Yannick Bamona, graphiste et illustrateur basé à Cotonou. J’ai étudié le graphisme au Studio M à Casablanca et, depuis 2016, je conçois logos, chartes graphiques et affiches de campagne pour des agences béninoises et leurs clients : un assureur, une marque de costumes, Canal+.",
+    "bio2": "Je pars du problème du client : qui doit remarquer la marque, où on la verra, et ce qu’on doit en retenir. Le dessin est ma façon de réfléchir : la plupart des projets commencent au crayon avant de devenir vectoriels.",
+    "expH": "Expérience",
+    "eduH": "Formation",
+    "langH": "Langues",
+    "langs": ["Français — langue maternelle", "Anglais — courant"],
+    "timeline": [
+      { "y": "2023 – 2025", "org": "Le Groupe Monarch", "place": "Agence de communication digitale · Cotonou", "d": "Logos, déclinaisons et chartes graphiques ; affiches de campagne pour Men In Suits (Ghana) et LB Assur." },
+      { "y": "2022 – auj.", "org": "Freelance", "place": "Cotonou et à distance", "d": "Logos pour Idylle Déco et Pastry’s House ; montage vidéo pour un gala au Maroc, pour Aidreve, et trois films avec le réalisateur Le Kipré." },
+      { "y": "2018", "org": "ATL S.A", "place": "Agence de communication et d’événementiel · Cotonou", "d": "Affiches pour une station balnéaire, logos pour plusieurs clients, planification audiovisuelle d’un grand événement." },
+      { "y": "2016 – 2017", "org": "Atelier Paon", "place": "Agence créative · Cotonou", "d": "Affiches hebdomadaires pour Canal+, la mascotte de l’agence et des logos clients." }
+    ],
+    "education": [
+      { "y": "2019 – 2022", "org": "Studio M, Casablanca", "d": "Graphisme" },
+      { "y": "2015", "org": "ETAP — École Technique d’Art Plastique, Casablanca", "d": "Infographie" }
+    ]
+  },
+  "tools": {
+    "kicker": "Outils",
+    "title": "Mes outils",
+    "groups": [
+      { "t": "Design", "items": ["Adobe Illustrator", "Adobe Photoshop", "Adobe InDesign"] },
+      { "t": "Vidéo & motion", "items": ["Adobe Premiere Pro", "Adobe After Effects"] },
+      { "t": "À la main", "items": ["Crayon et papier"] }
+    ]
+  },
+  "contact": {
+    "kicker": "Contact",
+    "title": "Un logo, une campagne ou une affiche à créer ?",
+    "intro": "Dites-moi ce dont vous avez besoin et pour quand. Je travaille en français et en anglais, avec des clients au Bénin et ailleurs.",
+    "formH": "Envoyer un message",
+    "name": "Nom",
+    "email": "E-mail",
+    "type": "Type de projet",
+    "choose": "Choisir",
+    "types": ["Logo / identité de marque", "Campagne ou affiche", "Illustration", "Montage vidéo", "Poste en agence ou CDI", "Autre"],
+    "msg": "Message",
+    "msgHint": "Quelques lignes sur le projet, les délais et un budget si vous en avez un.",
+    "send": "Envoyer",
+    "sending": "Envoi en cours…",
+    "req": "Champ obligatoire",
+    "honeypot": "Ne pas remplir ce champ",
+    "errName": "Indiquez votre nom.",
+    "errEmail": "Indiquez votre adresse e-mail.",
+    "errEmailF": "Indiquez une adresse au format nom@exemple.com.",
+    "errType": "Choisissez un type de projet.",
+    "errMsg": "Décrivez le projet en quelques mots (10 caractères minimum).",
+    "summary1": "Un champ est à corriger.",
+    "summaryN": "{n} champs sont à corriger.",
+    "errSend": "Le message n’a pas pu être envoyé. Réessayez, ou écrivez directement à {email}.",
+    "sentT": "Message envoyé.",
+    "sentB": "Merci, {name}. Je vous réponds bientôt par e-mail.",
+    "again": "Envoyer un autre message",
+    "wa": "Écrire sur WhatsApp",
+    "waMessage": "Bonjour Yannick, je vous contacte depuis votre site yannickbamona.com.",
+    "cv": "Télécharger le CV (PDF)",
+    "elsewhere": "Ailleurs",
+    "newTab": "(nouvel onglet)"
+  },
+  "footer": {
+    "note": "© {year} Yannick Bamona · yannickbamona.com",
+    "top": "Haut de page"
+  },
+  "case": {
+    "back": "Tous les travaux",
+    "kicker": "Étude de cas",
+    "client": "Client",
+    "year": "Année",
+    "role": "Rôle",
+    "tools": "Outils",
+    "nextH": "Besoin d’un logo qui fonctionne partout ?",
+    "nextB": "Je peux accompagner votre marque du premier croquis aux fichiers finaux.",
+    "nextCta": "Lancer un projet",
+    "onlyOther": "Disponible en anglais uniquement : le texte ci-dessous n’a pas encore été traduit.",
+    "breadcrumbHome": "Accueil",
+    "breadcrumbWork": "Travaux"
+  },
+  "lb": {
+    "label": "Visionneuse d’images",
+    "close": "Fermer la visionneuse",
+    "prev": "Image précédente",
+    "next": "Image suivante"
+  },
+  "notFound": {
+    "kicker": "Erreur 404",
+    "title": "Page introuvable",
+    "body": "Cette page n’existe pas ou a été déplacée.",
+    "home": "Retour à l’accueil"
+  }
+}

@@ -1,0 +1,31 @@
+---
+/** Homepage, shared by / (fr) and /en/ (en). */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/sections/Hero.astro';
+import Work from '../components/sections/Work.astro';
+import Services from '../components/sections/Services.astro';
+import About from '../components/sections/About.astro';
+import Tools from '../components/sections/Tools.astro';
+import Contact from '../components/sections/Contact.astro';
+import { useT, type Lang } from '../i18n';
+import { pages } from '../i18n/routes';
+import { getProjectCards } from '../lib/projects';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { t } = useT(lang);
+const projects = await getProjectCards(lang);
+const featured = projects.find((p) => p.featured && p.cover) ?? projects.find((p) => p.cover);
+---
+
+<BaseLayout lang={lang} description={t('meta.homeDescription')} alternates={pages.home} type="profile">
+  <Hero lang={lang} featured={featured} total={projects.length} />
+  <Work lang={lang} projects={projects} />
+  <Services lang={lang} />
+  <About lang={lang} />
+  <Tools lang={lang} />
+  <Contact lang={lang} />
+</BaseLayout>

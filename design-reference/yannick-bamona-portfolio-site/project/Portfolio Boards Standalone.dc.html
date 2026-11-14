@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<meta name="ext-resource-dependency" content="Yannick Bamona Portfolio.html" data-resource-id="site">
+</head>
+<body>
+<template id="__bundler_thumbnail" data-bg-color="#dcdad7"><svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><polygon points="150,120 280,120 280,250 250,280 120,280 120,150" fill="none" stroke="#C1121F" stroke-width="6"/><text x="200" y="222" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="72" fill="#1f1d1c">YB</text><circle cx="300" cy="300" r="7" fill="#C1121F"/></svg></template>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&amp;display=swap">
+<link rel="stylesheet" href="_ds/modernist-d654b15a-0dd8-4ede-b2c4-4f3671392d49/styles.css">
+<script src="_ds/modernist-d654b15a-0dd8-4ede-b2c4-4f3671392d49/_ds_bundle.js"></script>
+<style>body{margin:0;background:#dcdad7}</style>
+</helmet>
+<section style="padding:64px;font-family:'Archivo',system-ui,sans-serif;color:#1f1d1c">
+  <h1 style="margin:0 0 8px;font-weight:800;font-stretch:125%;font-size:44px;letter-spacing:-.03em;text-transform:uppercase">yannickbamona.com — boards</h1>
+  <p style="margin:0 0 48px;font-size:16px;color:#5a5653;max-width:720px">Each board is the live site (Portfolio.dc.html) at a fixed width. Everything is clickable: filters, lightbox, EN/FR, theme, form validation.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start">
+    <sc-for list="{{boards}}" as="b" hint-placeholder-count="10">
+      <div id="{{b.id}}" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:12px;font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase"><span style="background:#C1121F;color:#fff;padding:2px 8px">{{b.id}}</span><span>{{b.label}}</span></div>
+        <iframe src="{{b.src}}" title="{{b.label}}" style="width:{{b.w}}px;height:{{b.h}}px;border:0;background:#fff;box-shadow:0 12px 32px rgba(0,0,0,.18);display:block"></iframe>
+      </div>
+    </sc-for>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { h: {} };
+  B = [
+    ['1a', 'Home · desktop · light', 1440, 'theme=light'],
+    ['1b', 'Home · desktop · dark', 1440, 'theme=dark'],
+    ['1c', 'Home · mobile · light', 390, 'theme=light'],
+    ['1d', 'Home · mobile · dark', 390, 'theme=dark'],
+    ['1e', 'Case study · desktop · light', 1440, 'theme=light&page=case'],
+    ['1f', 'Case study · desktop · dark', 1440, 'theme=dark&page=case'],
+    ['1g', 'Case study · mobile · light', 390, 'theme=light&page=case'],
+    ['1h', 'Case study · mobile · dark (FR)', 390, 'theme=dark&page=case&lang=fr'],
+    ['1i', 'Contact · desktop · light', 1440, 'theme=light&only=contact'],
+    ['1j', 'Contact · mobile · dark', 390, 'theme=dark&only=contact']
+  ];
+  componentDidMount() {
+    this.onMsg = (e) => { const d = e.data; if (d && d.ybFrame && d.h && this.state.h[d.ybFrame] !== d.h) this.setState(s => ({ h: { ...s.h, [d.ybFrame]: d.h } })); };
+    window.addEventListener('message', this.onMsg);
+  }
+  componentWillUnmount() { window.removeEventListener('message', this.onMsg); }
+  renderVals() {
+    return { boards: this.B.map(([id, label, w, q]) => ({ id, label, w, h: this.state.h[id] || (w > 800 ? 900 : 844), src: `${(window.__resources && window.__resources.site) || 'Yannick Bamona Portfolio.html'}#frame=${id}&${q}` })) };
+  }
+}
+</script>
+</body>
+</html>

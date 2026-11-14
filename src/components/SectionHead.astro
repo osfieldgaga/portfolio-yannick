@@ -1,0 +1,22 @@
+---
+/** Red rule + "/// 01 / 05  KICKER" line that opens every home section. */
+interface Props {
+  /** e.g. "01 / 05". Omit for pages outside the home sequence. */
+  index?: string;
+  kicker: string;
+}
+const { index, kicker } = Astro.props;
+---
+
+<div class="rule" aria-hidden="true"></div>
+<div class="kicker">
+  <span class="slashes" aria-hidden="true">///</span>
+  {index && <span aria-hidden="true">{index}</span>}
+  <span>{kicker}</span>
+</div>
+
+<style>
+  .rule {
+    margin-bottom: 20px;
+  }
+</style>

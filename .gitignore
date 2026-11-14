@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.astro/
+.wrangler/
+.env
+.env.*
+!.env.example
+.DS_Store
+# Bundled Claude Design exports: duplicates of the .dc.html sources with base64 assets
+design-reference/**/Yannick Bamona Portfolio*.html

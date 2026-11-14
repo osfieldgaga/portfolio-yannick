@@ -1,0 +1,110 @@
+---
+/**
+ * The red notched HUD frame drawn around the viewport (design: `frame` prop).
+ * The paths depend on the viewport size, so a tiny script recomputes them on resize.
+ * Purely decorative: aria-hidden, pointer-events: none.
+ */
+---
+
+<div class="hud-bottom" aria-hidden="true"></div>
+<svg class="hud-frame" aria-hidden="true" focusable="false" preserveAspectRatio="none">
+  <path class="hud-outer"></path>
+  <path class="hud-inner"></path>
+  <path class="hud-fill"></path>
+</svg>
+
+<style>
+  .hud-bottom {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--gut-bottom);
+    background: var(--bg);
+    z-index: 140;
+    pointer-events: none;
+  }
+  .hud-frame {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    z-index: 150;
+    pointer-events: none;
+  }
+  .hud-outer {
+    fill: none;
+    stroke: var(--red);
+    stroke-width: 1.5;
+    stroke-linejoin: miter;
+  }
+  .hud-inner {
+    fill: none;
+    stroke: var(--red);
+    stroke-width: 1;
+    opacity: 0.55;
+  }
+  .hud-fill {
+    fill: var(--red);
+    stroke: none;
+  }
+  @media print {
+    .hud-bottom,
+    .hud-frame {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Port of framePaths() from design-reference/…/Portfolio.dc.html
+  function framePaths(W: number, H: number, sm: boolean) {
+    const m = sm ? 3 : 5, r = sm ? 7 : 10, c = sm ? 10 : 16, y0 = m + r, b0 = H - m - r, bL = H - m;
+    const tw = sm ? 56 : 92, tL = Math.round(W * (sm ? 0.52 : 0.6)), tR = tL + tw;
+    const bw = sm ? 48 : 80, bLx = Math.round(W * 0.5 - bw / 2), bRx = bLx + bw, k = r;
+    const outer = `M${m},${y0 + c}L${m + c},${y0}L${tL},${y0}L${tL + k},${m}L${tR},${m}L${tR + k},${y0}L${W - m - c},${y0}L${W - m},${y0 + c}L${W - m},${b0 - c}L${W - m - c},${b0}L${bRx + k},${b0}L${bRx},${bL}L${bLx},${bL}L${bLx - k},${b0}L${m + c},${b0}L${m},${b0 - c}Z`;
+    const i = sm ? 4 : 6, ll = sm ? 70 : 180, vl = sm ? 50 : 110;
+    const inner =
+      `M${m + i},${y0 + c + vl}L${m + i},${y0 + c + i * 0.4}L${m + c + i * 0.4},${y0 + i}L${m + c + ll},${y0 + i}` +
+      `M${W - m - c - ll * 0.6},${y0 + i}L${W - m - c - i * 0.4},${y0 + i}L${W - m - i},${y0 + c + i * 0.4}L${W - m - i},${y0 + c + vl}` +
+      `M${W - m - i},${b0 - c - vl * 0.7}L${W - m - i},${b0 - c - i * 0.4}L${W - m - c - i * 0.4},${b0 - i}L${W - m - c - ll * 0.5},${b0 - i}` +
+      `M${m + c + ll * 0.5},${b0 - i}L${m + c + i * 0.4},${b0 - i}L${m + i},${b0 - c - i * 0.4}`;
+    const sl = (x0: number, yTop: number, yBot: number, n: number) => {
+      let d = '';
+      const w = sm ? 4 : 6, g = sm ? 7 : 11;
+      for (let j = 0; j < n; j++) {
+        const x = x0 + j * g;
+        d += `M${x},${yBot}L${x + w},${yTop}L${x + w + 3},${yTop}L${x + 3},${yBot}Z`;
+      }
+      return d;
+    };
+    const ty = sm ? 160 : 220, th = sm ? 16 : 26;
+    const fill =
+      sl(tL + k + (sm ? 8 : 16), m + 2, y0 - 2, 3) +
+      sl(bLx + (sm ? 6 : 14), b0 + 2, bL - 2, 3) +
+      `M${m},${ty}L${m + 5},${ty + 5}L${m + 5},${ty + th}L${m},${ty + th + 5}Z`;
+    return { vb: `0 0 ${W} ${H}`, outer, inner, fill };
+  }
+
+  const svg = document.querySelector<SVGSVGElement>('.hud-frame');
+  if (svg) {
+    const [outer, inner, fill] = svg.querySelectorAll('path');
+    let raf = 0;
+    const draw = () => {
+      raf = 0;
+      const W = document.documentElement.clientWidth;
+      const H = window.innerHeight;
+      const p = framePaths(W, H, window.innerWidth < 640);
+      svg.setAttribute('viewBox', p.vb);
+      outer.setAttribute('d', p.outer);
+      inner.setAttribute('d', p.inner);
+      fill.setAttribute('d', p.fill);
+    };
+    draw();
+    window.addEventListener('resize', () => {
+      if (!raf) raf = requestAnimationFrame(draw);
+    });
+  }
+</script>
