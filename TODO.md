@@ -21,5 +21,8 @@ Placeholders currently on the site. Each line says where to change it.
 - [ ] Pastry's House: scans of the pencil sketches (case study, step 01)
 
 ## Text
-- [ ] Pastry's House case study, outcome: where the logo is used today, and a short quote from the owner
-- [ ] Year for each project (only Pastry's House, 2023, is known from the design)
+The build prints every Markdown file that still contains a `[TODO` marker.
+
+- [ ] Pastry's House case study (`src/content/projects/pastrys-house/`), outcome: where the logo is used today, and a short quote from the owner
+- [ ] Idylle Déco case study (`src/content/projects/idylle-deco/`): subtitle, brief, process, outcome, year and tools
+- [ ] Year for each project (only Pastry's House, 2023, is known from the design). Add `year: 2024` to the project's fr.md and en.md.

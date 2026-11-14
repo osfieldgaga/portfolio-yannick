@@ -7,6 +7,7 @@ import Services from '../components/sections/Services.astro';
 import About from '../components/sections/About.astro';
 import Tools from '../components/sections/Tools.astro';
 import Contact from '../components/sections/Contact.astro';
+import Lightbox from '../components/Lightbox.astro';
 import { useT, type Lang } from '../i18n';
 import { pages } from '../i18n/routes';
 import { getProjectCards } from '../lib/projects';
@@ -28,4 +29,5 @@ const featured = projects.find((p) => p.featured && p.cover) ?? projects.find((p
   <About lang={lang} />
   <Tools lang={lang} />
   <Contact lang={lang} />
+  <Lightbox lang={lang} />
 </BaseLayout>

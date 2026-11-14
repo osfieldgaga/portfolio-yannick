@@ -2,7 +2,7 @@
 import { Picture } from 'astro:assets';
 import Icon from './Icon.astro';
 import { useT, type Lang } from '../i18n';
-import type { ProjectCardData } from '../lib/projects';
+import { lightboxItems, type ProjectCardData } from '../lib/projects';
 
 interface Props {
   lang: Lang;
@@ -12,9 +12,10 @@ interface Props {
 const { lang, project: p } = Astro.props;
 const { t } = useT(lang);
 const multi = p.images.length > 1;
+const items = p.cover ? JSON.stringify(await lightboxItems(p.images)) : undefined;
 ---
 
-<li class="card" data-category={p.category}>
+<li class="card" data-category={p.category} data-slug={p.slug} data-title={p.title} data-caption={p.summary} data-lightbox-items={items}>
   {
     p.cover ? (
       <button type="button" class="zoom" data-lightbox-open={p.slug} aria-label={t('work.open', { t: p.title })}>

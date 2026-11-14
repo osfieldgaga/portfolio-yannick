@@ -1,0 +1,266 @@
+---
+/**
+ * Accessible image viewer (design: dark full-screen viewer with counter,
+ * title/caption, prev/next). Native <dialog> provides the focus trap, Esc and
+ * the inert background; the script adds arrows, swipe and focus return.
+ *
+ * Triggers:
+ *  - [data-lightbox-open="slug"] → images of all visible project cards
+ *    (li[data-lightbox-items]), starting at that project.
+ *  - [data-lb-src] → every [data-lb-src] on the page (case study), deduplicated.
+ */
+import { useT, type Lang } from '../i18n';
+import Icon from './Icon.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const { t } = useT(lang);
+---
+
+<dialog class="lb" aria-labelledby="lb-title" aria-describedby="lb-caption" data-lightbox>
+  <div class="lb-top">
+    <span class="lb-counter" aria-hidden="true"><span class="red">///</span><span data-lb-counter></span></span>
+    <button type="button" class="lb-btn" data-lb-close aria-label={t('lb.close')}><Icon name="close" size={20} /></button>
+  </div>
+  <div class="lb-stage" data-lb-stage>
+    <img data-lb-img alt="" decoding="async" />
+  </div>
+  <div class="lb-bottom">
+    <div class="lb-text">
+      <h2 id="lb-title" data-lb-title></h2>
+      <p id="lb-caption" data-lb-caption></p>
+    </div>
+    <div class="lb-nav">
+      <button type="button" class="lb-btn lg" data-lb-prev aria-label={t('lb.prev')}><Icon name="chevron-left" size={20} /></button>
+      <button type="button" class="lb-btn lg" data-lb-next aria-label={t('lb.next')}><Icon name="chevron-right" size={20} /></button>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .lb {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    z-index: 200;
+    background: var(--lb-bg);
+    color: var(--lb-ink);
+    --accent: var(--lb-red);
+  }
+  .lb[open] {
+    display: flex;
+    flex-direction: column;
+  }
+  .lb::backdrop {
+    background: var(--lb-bg);
+  }
+  .lb-top,
+  .lb-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 12px clamp(12px, 3vw, 24px);
+  }
+  .lb-top {
+    border-bottom: 1px solid var(--lb-line);
+  }
+  .lb-bottom {
+    padding-bottom: 16px;
+    border-top: 1px solid var(--lb-line);
+  }
+  .lb-counter {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    gap: 10px;
+  }
+  .red {
+    color: var(--lb-red);
+  }
+  .lb-btn {
+    width: 44px;
+    height: 44px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 1px solid var(--lb-line-strong);
+    color: var(--lb-ink);
+    cursor: pointer;
+    padding: 0;
+  }
+  .lb-btn.lg {
+    width: 48px;
+    height: 48px;
+  }
+  .lb-btn:hover {
+    border-color: var(--lb-red);
+  }
+  .lb-stage {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(12px, 3vw, 40px);
+  }
+  .lb-stage img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    user-select: none;
+  }
+  .lb-text {
+    min-width: 0;
+  }
+  .lb-text h2 {
+    font-weight: 800;
+    font-stretch: 112%;
+    font-size: 18px;
+    line-height: 1.2;
+  }
+  .lb-text p {
+    margin-top: 2px;
+    font-size: 14px;
+    color: var(--lb-muted);
+  }
+  .lb-nav {
+    display: flex;
+    gap: 8px;
+    flex: none;
+  }
+  .lb-nav[hidden] {
+    display: none;
+  }
+</style>
+
+<script>
+  interface Item {
+    src: string;
+    alt: string;
+    title: string;
+    caption: string;
+    slug?: string;
+  }
+
+  const dlg = document.querySelector<HTMLDialogElement>('[data-lightbox]');
+  if (dlg) {
+    const img = dlg.querySelector<HTMLImageElement>('[data-lb-img]')!;
+    const titleEl = dlg.querySelector<HTMLElement>('[data-lb-title]')!;
+    const capEl = dlg.querySelector<HTMLElement>('[data-lb-caption]')!;
+    const counter = dlg.querySelector<HTMLElement>('[data-lb-counter]')!;
+    const nav = dlg.querySelector<HTMLElement>('.lb-nav')!;
+    const closeBtn = dlg.querySelector<HTMLButtonElement>('[data-lb-close]')!;
+    let items: Item[] = [];
+    let index = 0;
+    let lastFocus: HTMLElement | null = null;
+    const pad = (n: number) => String(n).padStart(2, '0');
+
+    const show = (i: number) => {
+      index = (i + items.length) % items.length;
+      const it = items[index];
+      img.src = it.src;
+      img.alt = it.alt;
+      titleEl.textContent = it.title;
+      capEl.textContent = it.caption;
+      counter.textContent = `${pad(index + 1)} / ${pad(items.length)}`;
+      // Preload neighbours
+      [index + 1, index - 1].forEach((j) => {
+        const n = items[(j + items.length) % items.length];
+        if (n) new Image().src = n.src;
+      });
+    };
+
+    const open = (list: Item[], start: number, trigger: HTMLElement) => {
+      if (!list.length) return;
+      items = list;
+      lastFocus = trigger;
+      nav.hidden = list.length < 2;
+      show(start);
+      dlg.showModal();
+      document.documentElement.style.overflow = 'hidden';
+      closeBtn.focus();
+    };
+
+    const close = () => dlg.open && dlg.close();
+    dlg.addEventListener('close', () => {
+      document.documentElement.style.overflow = '';
+      img.removeAttribute('src');
+      lastFocus?.focus();
+    });
+
+    closeBtn.addEventListener('click', close);
+    dlg.querySelector('[data-lb-prev]')!.addEventListener('click', () => show(index - 1));
+    dlg.querySelector('[data-lb-next]')!.addEventListener('click', () => show(index + 1));
+    dlg.querySelector('[data-lb-stage]')!.addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) close();
+    });
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        show(index + 1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        show(index - 1);
+      }
+    });
+
+    // Swipe
+    let tx = 0, ty = 0;
+    dlg.addEventListener('touchstart', (e) => {
+      tx = e.touches[0].clientX;
+      ty = e.touches[0].clientY;
+    }, { passive: true });
+    dlg.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - tx;
+      const dy = e.changedTouches[0].clientY - ty;
+      if (items.length > 1 && Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(dx < 0 ? index + 1 : index - 1);
+    });
+
+    // Project cards (homepage)
+    const cardItems = (): Item[] =>
+      [...document.querySelectorAll<HTMLElement>('li[data-lightbox-items]')]
+        .filter((li) => !li.hidden)
+        .flatMap((li) => {
+          const list = JSON.parse(li.dataset.lightboxItems || '[]') as { src: string; alt: string; caption?: string }[];
+          return list.map((x) => ({ src: x.src, alt: x.alt, title: li.dataset.title || '', caption: x.caption || li.dataset.caption || '', slug: li.dataset.slug }));
+        });
+
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const projectTrigger = target.closest<HTMLElement>('[data-lightbox-open]');
+      if (projectTrigger) {
+        const slug = projectTrigger.dataset.lightboxOpen!;
+        const card = document.querySelector<HTMLElement>(`li[data-slug="${CSS.escape(slug)}"]`);
+        // The hero's featured project may be filtered out: show all first (as in the design).
+        if (card?.hidden) document.dispatchEvent(new CustomEvent('yb:filter', { detail: 'all' }));
+        const list = cardItems();
+        open(list, Math.max(0, list.findIndex((x) => x.slug === slug)), projectTrigger);
+        return;
+      }
+      const imgTrigger = target.closest<HTMLElement>('[data-lb-src]');
+      if (imgTrigger) {
+        const seen = new Set<string>();
+        const list: Item[] = [];
+        document.querySelectorAll<HTMLElement>('[data-lb-src]').forEach((el) => {
+          const src = el.dataset.lbSrc!;
+          if (seen.has(src)) return;
+          seen.add(src);
+          list.push({ src, alt: el.dataset.lbAlt || '', title: el.dataset.lbTitle || '', caption: el.dataset.lbCaption || '' });
+        });
+        open(list, Math.max(0, list.findIndex((x) => x.src === imgTrigger.dataset.lbSrc)), imgTrigger);
+      }
+    });
+  }
+</script>

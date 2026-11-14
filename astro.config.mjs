@@ -1,5 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import { satteri } from '@astrojs/markdown-satteri';
+import { todoImages, requireAlt, caseStudyLayout } from './src/lib/markdown/case-study-plugins.mjs';
 
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
@@ -13,5 +15,16 @@ export default defineConfig({
     defaultLocale: 'fr',
     // French lives at the root (/), English under /en/.
     routing: { prefixDefaultLocale: false },
+  },
+  image: {
+    // Images in Markdown get a responsive srcset, width/height and lazy-loading.
+    layout: 'constrained',
+    responsiveStyles: false,
+  },
+  markdown: {
+    processor: satteri({
+      mdastPlugins: [todoImages, requireAlt],
+      hastPlugins: [caseStudyLayout],
+    }),
   },
 });

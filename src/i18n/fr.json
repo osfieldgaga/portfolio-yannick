@@ -66,10 +66,26 @@
     "title": "Ce que je peux faire pour vous",
     "areaServed": "Bénin et à distance",
     "items": [
-      { "t": "Identité de marque", "d": "Logos, couleurs, typographies, déclinaisons et une charte graphique simple que votre équipe utilisera vraiment.", "tools": "Illustrator · Photoshop · InDesign" },
-      { "t": "Affiches de campagne", "d": "Affiches print et réseaux sociaux pour lancements, événements et programmes hebdomadaires, dans tous les formats nécessaires.", "tools": "Photoshop · Illustrator" },
-      { "t": "Illustration", "d": "Portraits, mascottes, scènes et motifs, du croquis au crayon à l’illustration numérique finale.", "tools": "Crayon · Photoshop · Illustrator" },
-      { "t": "Montage vidéo", "d": "Montages promotionnels, films d’événements et motion design pour les réseaux et les écrans.", "tools": "Premiere Pro · After Effects" }
+      {
+        "t": "Identité de marque",
+        "d": "Logos, couleurs, typographies, déclinaisons et une charte graphique simple que votre équipe utilisera vraiment.",
+        "tools": "Illustrator · Photoshop · InDesign"
+      },
+      {
+        "t": "Affiches de campagne",
+        "d": "Affiches print et réseaux sociaux pour lancements, événements et programmes hebdomadaires, dans tous les formats nécessaires.",
+        "tools": "Photoshop · Illustrator"
+      },
+      {
+        "t": "Illustration",
+        "d": "Portraits, mascottes, scènes et motifs, du croquis au crayon à l’illustration numérique finale.",
+        "tools": "Crayon · Photoshop · Illustrator"
+      },
+      {
+        "t": "Montage vidéo",
+        "d": "Montages promotionnels, films d’événements et motion design pour les réseaux et les écrans.",
+        "tools": "Premiere Pro · After Effects"
+      }
     ]
   },
   "about": {
@@ -81,25 +97,74 @@
     "expH": "Expérience",
     "eduH": "Formation",
     "langH": "Langues",
-    "langs": ["Français — langue maternelle", "Anglais — courant"],
+    "langs": [
+      "Français — langue maternelle",
+      "Anglais — courant"
+    ],
     "timeline": [
-      { "y": "2023 – 2025", "org": "Le Groupe Monarch", "place": "Agence de communication digitale · Cotonou", "d": "Logos, déclinaisons et chartes graphiques ; affiches de campagne pour Men In Suits (Ghana) et LB Assur." },
-      { "y": "2022 – auj.", "org": "Freelance", "place": "Cotonou et à distance", "d": "Logos pour Idylle Déco et Pastry’s House ; montage vidéo pour un gala au Maroc, pour Aidreve, et trois films avec le réalisateur Le Kipré." },
-      { "y": "2018", "org": "ATL S.A", "place": "Agence de communication et d’événementiel · Cotonou", "d": "Affiches pour une station balnéaire, logos pour plusieurs clients, planification audiovisuelle d’un grand événement." },
-      { "y": "2016 – 2017", "org": "Atelier Paon", "place": "Agence créative · Cotonou", "d": "Affiches hebdomadaires pour Canal+, la mascotte de l’agence et des logos clients." }
+      {
+        "y": "2023 – 2025",
+        "org": "Le Groupe Monarch",
+        "place": "Agence de communication digitale · Cotonou",
+        "d": "Logos, déclinaisons et chartes graphiques ; affiches de campagne pour Men In Suits (Ghana) et LB Assur."
+      },
+      {
+        "y": "2022 – auj.",
+        "org": "Freelance",
+        "place": "Cotonou et à distance",
+        "d": "Logos pour Idylle Déco et Pastry’s House ; montage vidéo pour un gala au Maroc, pour Aidreve, et trois films avec le réalisateur Le Kipré."
+      },
+      {
+        "y": "2018",
+        "org": "ATL S.A",
+        "place": "Agence de communication et d’événementiel · Cotonou",
+        "d": "Affiches pour une station balnéaire, logos pour plusieurs clients, planification audiovisuelle d’un grand événement."
+      },
+      {
+        "y": "2016 – 2017",
+        "org": "Atelier Paon",
+        "place": "Agence créative · Cotonou",
+        "d": "Affiches hebdomadaires pour Canal+, la mascotte de l’agence et des logos clients."
+      }
     ],
     "education": [
-      { "y": "2019 – 2022", "org": "Studio M, Casablanca", "d": "Graphisme" },
-      { "y": "2015", "org": "ETAP — École Technique d’Art Plastique, Casablanca", "d": "Infographie" }
+      {
+        "y": "2019 – 2022",
+        "org": "Studio M, Casablanca",
+        "d": "Graphisme"
+      },
+      {
+        "y": "2015",
+        "org": "ETAP — École Technique d’Art Plastique, Casablanca",
+        "d": "Infographie"
+      }
     ]
   },
   "tools": {
     "kicker": "Outils",
     "title": "Mes outils",
     "groups": [
-      { "t": "Design", "items": ["Adobe Illustrator", "Adobe Photoshop", "Adobe InDesign"] },
-      { "t": "Vidéo & motion", "items": ["Adobe Premiere Pro", "Adobe After Effects"] },
-      { "t": "À la main", "items": ["Crayon et papier"] }
+      {
+        "t": "Design",
+        "items": [
+          "Adobe Illustrator",
+          "Adobe Photoshop",
+          "Adobe InDesign"
+        ]
+      },
+      {
+        "t": "Vidéo & motion",
+        "items": [
+          "Adobe Premiere Pro",
+          "Adobe After Effects"
+        ]
+      },
+      {
+        "t": "À la main",
+        "items": [
+          "Crayon et papier"
+        ]
+      }
     ]
   },
   "contact": {
@@ -111,7 +176,14 @@
     "email": "E-mail",
     "type": "Type de projet",
     "choose": "Choisir",
-    "types": ["Logo / identité de marque", "Campagne ou affiche", "Illustration", "Montage vidéo", "Poste en agence ou CDI", "Autre"],
+    "types": [
+      "Logo / identité de marque",
+      "Campagne ou affiche",
+      "Illustration",
+      "Montage vidéo",
+      "Poste en agence ou CDI",
+      "Autre"
+    ],
     "msg": "Message",
     "msgHint": "Quelques lignes sur le projet, les délais et un budget si vous en avez un.",
     "send": "Envoyer",
@@ -146,6 +218,7 @@
     "year": "Année",
     "role": "Rôle",
     "tools": "Outils",
+    "gallery": "Galerie",
     "nextH": "Besoin d’un logo qui fonctionne partout ?",
     "nextB": "Je peux accompagner votre marque du premier croquis aux fichiers finaux.",
     "nextCta": "Lancer un projet",

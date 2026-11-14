@@ -66,10 +66,26 @@
     "title": "What I can do for you",
     "areaServed": "Benin and remote",
     "items": [
-      { "t": "Brand identity", "d": "Logos, colour and type choices, variations and a simple brand charter your team can actually use.", "tools": "Illustrator · Photoshop · InDesign" },
-      { "t": "Campaign posters", "d": "Print and social posters for launches, events and weekly programmes, in every format the campaign needs.", "tools": "Photoshop · Illustrator" },
-      { "t": "Illustration", "d": "Portraits, mascots, scenes and patterns, from pencil sketch to finished digital artwork.", "tools": "Pencil · Photoshop · Illustrator" },
-      { "t": "Video editing", "d": "Promo edits, event films and motion graphics for social media and screens.", "tools": "Premiere Pro · After Effects" }
+      {
+        "t": "Brand identity",
+        "d": "Logos, colour and type choices, variations and a simple brand charter your team can actually use.",
+        "tools": "Illustrator · Photoshop · InDesign"
+      },
+      {
+        "t": "Campaign posters",
+        "d": "Print and social posters for launches, events and weekly programmes, in every format the campaign needs.",
+        "tools": "Photoshop · Illustrator"
+      },
+      {
+        "t": "Illustration",
+        "d": "Portraits, mascots, scenes and patterns, from pencil sketch to finished digital artwork.",
+        "tools": "Pencil · Photoshop · Illustrator"
+      },
+      {
+        "t": "Video editing",
+        "d": "Promo edits, event films and motion graphics for social media and screens.",
+        "tools": "Premiere Pro · After Effects"
+      }
     ]
   },
   "about": {
@@ -81,25 +97,74 @@
     "expH": "Experience",
     "eduH": "Education",
     "langH": "Languages",
-    "langs": ["French — native", "English — fluent"],
+    "langs": [
+      "French — native",
+      "English — fluent"
+    ],
     "timeline": [
-      { "y": "2023 – 2025", "org": "Le Groupe Monarch", "place": "Digital communication agency · Cotonou", "d": "Logos, variations and brand charters; campaign posters for Men In Suits (Ghana) and LB Assur." },
-      { "y": "2022 – now", "org": "Freelance", "place": "Cotonou and remote", "d": "Logos for Idylle Déco and Pastry’s House; video editing for a gala event in Morocco, for Aidreve, and three films with director Le Kipré." },
-      { "y": "2018", "org": "ATL S.A", "place": "Communication and events agency · Cotonou", "d": "Posters for a seaside resort, logos for several clients, audiovisual planning for a large public event." },
-      { "y": "2016 – 2017", "org": "Atelier Paon", "place": "Creative agency · Cotonou", "d": "Weekly posters for Canal+, the agency mascot, and logos for clients." }
+      {
+        "y": "2023 – 2025",
+        "org": "Le Groupe Monarch",
+        "place": "Digital communication agency · Cotonou",
+        "d": "Logos, variations and brand charters; campaign posters for Men In Suits (Ghana) and LB Assur."
+      },
+      {
+        "y": "2022 – now",
+        "org": "Freelance",
+        "place": "Cotonou and remote",
+        "d": "Logos for Idylle Déco and Pastry’s House; video editing for a gala event in Morocco, for Aidreve, and three films with director Le Kipré."
+      },
+      {
+        "y": "2018",
+        "org": "ATL S.A",
+        "place": "Communication and events agency · Cotonou",
+        "d": "Posters for a seaside resort, logos for several clients, audiovisual planning for a large public event."
+      },
+      {
+        "y": "2016 – 2017",
+        "org": "Atelier Paon",
+        "place": "Creative agency · Cotonou",
+        "d": "Weekly posters for Canal+, the agency mascot, and logos for clients."
+      }
     ],
     "education": [
-      { "y": "2019 – 2022", "org": "Studio M, Casablanca", "d": "Graphic design" },
-      { "y": "2015", "org": "ETAP — École Technique d’Art Plastique, Casablanca", "d": "Infographics" }
+      {
+        "y": "2019 – 2022",
+        "org": "Studio M, Casablanca",
+        "d": "Graphic design"
+      },
+      {
+        "y": "2015",
+        "org": "ETAP — École Technique d’Art Plastique, Casablanca",
+        "d": "Infographics"
+      }
     ]
   },
   "tools": {
     "kicker": "Tools",
     "title": "What I work with",
     "groups": [
-      { "t": "Design", "items": ["Adobe Illustrator", "Adobe Photoshop", "Adobe InDesign"] },
-      { "t": "Video & motion", "items": ["Adobe Premiere Pro", "Adobe After Effects"] },
-      { "t": "By hand", "items": ["Pencil and paper"] }
+      {
+        "t": "Design",
+        "items": [
+          "Adobe Illustrator",
+          "Adobe Photoshop",
+          "Adobe InDesign"
+        ]
+      },
+      {
+        "t": "Video & motion",
+        "items": [
+          "Adobe Premiere Pro",
+          "Adobe After Effects"
+        ]
+      },
+      {
+        "t": "By hand",
+        "items": [
+          "Pencil and paper"
+        ]
+      }
     ]
   },
   "contact": {
@@ -111,7 +176,14 @@
     "email": "Email",
     "type": "Project type",
     "choose": "Choose one",
-    "types": ["Logo / brand identity", "Campaign or poster", "Illustration", "Video editing", "Full-time or agency role", "Something else"],
+    "types": [
+      "Logo / brand identity",
+      "Campaign or poster",
+      "Illustration",
+      "Video editing",
+      "Full-time or agency role",
+      "Something else"
+    ],
     "msg": "Message",
     "msgHint": "A few lines on the project, the timing and a budget if you have one.",
     "send": "Send message",
@@ -146,6 +218,7 @@
     "year": "Year",
     "role": "Role",
     "tools": "Tools",
+    "gallery": "Gallery",
     "nextH": "Need a logo that works everywhere?",
     "nextB": "I can take your brand from the first sketch to final files.",
     "nextCta": "Start a project",

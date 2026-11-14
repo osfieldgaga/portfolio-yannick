@@ -1,0 +1,355 @@
+---
+/** Case-study page (design: page=case), shared by /projets/<slug>/ and /en/projects/<slug>/. */
+import { Picture } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import Lightbox from '../components/Lightbox.astro';
+import { useT, type Lang } from '../i18n';
+import { sectionHref, projectAlternates } from '../i18n/routes';
+import { fullSize, type Project } from '../lib/projects';
+import '../styles/case-study.css';
+
+interface Props {
+  lang: Lang;
+  project: Project;
+}
+
+const { lang, project: p } = Astro.props;
+const { t } = useT(lang);
+const d = p.entry.data;
+const { Content } = await render(p.entry);
+const catLabel = t(`categories.${p.category}`);
+
+const meta = [
+  { k: t('case.client'), v: d.client },
+  { k: t('case.year'), v: d.year?.toString() },
+  { k: t('case.role'), v: d.role },
+  { k: t('case.tools'), v: d.tools.length ? d.tools.join(', ') : undefined },
+].filter((m): m is { k: string; v: string } => !!m.v);
+
+const coverFull = p.cover ? await fullSize(p.cover.src) : undefined;
+const gallery = await Promise.all(d.gallery.map(async (g) => ({ ...g, full: await fullSize(g.src) })));
+const description = d.subtitle ?? d.summary;
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${p.title} · ${catLabel}`}
+  description={description}
+  alternates={projectAlternates(p.slug)}
+  type="article">
+  <article class="case" aria-labelledby="case-title">
+    <a class="back" href={sectionHref(lang, 'work')}><Icon name="arrow-left" />{t('case.back')}</a>
+
+    <div class="kicker case-kicker">
+      <span class="slashes" aria-hidden="true">///</span>
+      <span>{t('case.kicker')} · {catLabel}</span>
+    </div>
+    <h1 id="case-title" lang={p.fallback ? p.contentLang : undefined}>{p.title}</h1>
+    <p class="sub" lang={p.fallback ? p.contentLang : undefined}>{description}</p>
+
+    {p.fallback && <p class="notice" role="note"><span class="slashes" aria-hidden="true">//</span>{t('case.onlyOther')}</p>}
+
+    {
+      meta.length > 0 && (
+        <dl class="meta" lang={p.fallback ? p.contentLang : undefined}>
+          {meta.map((m) => (
+            <div>
+              <dt class="label" lang={lang}>
+                {m.k}
+              </dt>
+              <dd>{m.v}</dd>
+            </div>
+          ))}
+        </dl>
+      )
+    }
+
+    {
+      p.cover && (
+        <figure class="cover">
+          <button
+            type="button"
+            class="zoom"
+            data-lb-src={coverFull}
+            data-lb-alt={p.cover.alt}
+            data-lb-title={p.title}
+            data-lb-caption={d.coverCaption ?? ''}
+            aria-label={t('work.open', { t: d.coverCaption ?? p.title })}>
+            <div class="notch notch-tlbr" style="--c:22px">
+              <div class={`notch-in shot fit-${p.coverFit}`} style={`background:${p.coverBg};--pad:${p.coverPadding}`}>
+                <Picture
+                  src={p.cover.src}
+                  alt={p.cover.alt}
+                  formats={['avif', 'webp']}
+                  widths={[640, 960, 1280, 1600, 2000].filter((w) => w <= p.cover!.src.width)}
+                  sizes="(min-width: 1280px) 1184px, 100vw"
+                  loading="eager"
+                  fetchpriority="high"
+                />
+              </div>
+            </div>
+          </button>
+          {d.coverCaption && <figcaption>{d.coverCaption}</figcaption>}
+        </figure>
+      )
+    }
+
+    <div class="cs-content" lang={p.fallback ? p.contentLang : undefined} data-lb-title={p.title} data-open-template={t('work.open')}>
+      <Content />
+    </div>
+
+    {
+      gallery.length > 0 && (
+        <section class="cs-section cs-gallery" aria-labelledby="gallery-h">
+          <h2 id="gallery-h" class="label">
+            {d.galleryTitle ?? t('case.gallery')}
+          </h2>
+          <ul>
+            {gallery.map((g) => (
+              <li>
+                <button
+                  type="button"
+                  class="zoom tile-btn"
+                  data-lb-src={g.full}
+                  data-lb-alt={g.alt}
+                  data-lb-title={p.title}
+                  data-lb-caption={g.caption ?? ''}
+                  aria-label={t('work.open', { t: g.caption ?? g.alt })}>
+                  <div class={`tile fit-${g.fit}`} style={g.bg ? `background:${g.bg}` : undefined}>
+                    <Picture
+                      src={g.src}
+                      alt={g.alt}
+                      formats={['avif', 'webp']}
+                      widths={[320, 480, 640].filter((w) => w <= g.src.width)}
+                      sizes="(min-width: 1000px) 300px, 50vw"
+                      loading="lazy"
+                    />
+                  </div>
+                </button>
+                {g.caption && <span class="tile-cap">{g.caption}</span>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <aside class="next notch notch-tr" style="--c:24px" aria-labelledby="next-h">
+      <div class="notch-in next-in">
+        <div class="next-text">
+          <h2 id="next-h">{t('case.nextH')}</h2>
+          <p>{t('case.nextB')}</p>
+        </div>
+        <div class="next-ctas">
+          <a href={sectionHref(lang, 'contact')} class="btn btn-primary">{t('case.nextCta')}<Icon name="arrow-right" /></a>
+          <a href={sectionHref(lang, 'work')} class="btn btn-secondary">{t('case.back')}</a>
+        </div>
+      </div>
+    </aside>
+  </article>
+  <Lightbox lang={lang} />
+</BaseLayout>
+
+<script>
+  // Make every image in the case-study body open the lightbox.
+  const scope = document.querySelector<HTMLElement>('.cs-content');
+  if (scope) {
+    const title = scope.dataset.lbTitle || '';
+    const template = scope.dataset.openTemplate || '{t}';
+    scope.querySelectorAll<HTMLImageElement>('.cs-figure img').forEach((img) => {
+      const fig = img.closest('figure')!;
+      const frame = fig.querySelector<HTMLElement>('.notch')!;
+      // Largest candidate from the responsive srcset
+      const best =
+        (img.getAttribute('srcset') || '')
+          .split(',')
+          .map((s) => s.trim().split(/\s+/))
+          .filter((p) => p[0])
+          .map(([url, w]) => ({ url, w: parseInt(w) || 0 }))
+          .sort((a, b) => b.w - a.w)[0]?.url || img.currentSrc || img.src;
+      const caption = fig.querySelector('figcaption')?.textContent?.trim() || '';
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'zoom';
+      btn.dataset.lbSrc = best;
+      btn.dataset.lbAlt = img.alt;
+      btn.dataset.lbTitle = title;
+      btn.dataset.lbCaption = caption;
+      btn.setAttribute('aria-label', template.replace('{t}', caption || img.alt));
+      frame.replaceWith(btn);
+      btn.append(frame);
+    });
+  }
+</script>
+
+<style>
+  .case {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: clamp(24px, 4vw, 40px) var(--pad-x) clamp(72px, 9vw, 128px);
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .back:hover {
+    color: var(--link);
+  }
+  .case-kicker {
+    margin-top: clamp(24px, 4vw, 48px);
+  }
+  h1 {
+    margin: 12px 0 0;
+    font-weight: 800;
+    font-stretch: 125%;
+    font-size: clamp(44px, 8vw, 120px);
+    line-height: 0.9;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+  .sub {
+    margin: 24px 0 0;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    max-width: 720px;
+    text-wrap: pretty;
+  }
+  .notice {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    max-width: 720px;
+    padding: 12px 14px;
+    border: 1px solid var(--line-strong);
+    border-left: 4px solid var(--red);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .meta {
+    margin: clamp(32px, 5vw, 56px) 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 24px;
+  }
+  .meta > div {
+    border-top: 2px solid var(--line-strong);
+    padding-top: 12px;
+  }
+  .meta dd {
+    margin: 6px 0 0;
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .cover {
+    margin-top: clamp(40px, 6vw, 72px);
+  }
+  .shot {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .shot :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .shot.fit-contain :global(img) {
+    object-fit: contain;
+    padding: var(--pad, 0);
+  }
+  .cover figcaption {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .cs-gallery ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+    gap: 16px;
+    max-width: 640px;
+  }
+  .cs-gallery li {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .cs-gallery h2 {
+    margin: 0 0 16px;
+  }
+  .tile {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--surface);
+  }
+  .tile-btn:hover .tile,
+  .tile-btn:focus-visible .tile {
+    border-color: var(--red);
+  }
+  .tile :global(img) {
+    width: 100%;
+    height: 100%;
+  }
+  .tile.fit-contain {
+    padding: 10%;
+  }
+  .tile.fit-contain :global(img) {
+    object-fit: contain;
+  }
+  .tile.fit-cover :global(img) {
+    object-fit: cover;
+  }
+  .tile-cap {
+    font-size: 14px;
+  }
+
+  .next {
+    margin-top: clamp(56px, 8vw, 112px);
+  }
+  .next-in {
+    background: var(--surface);
+    padding: clamp(24px, 4vw, 48px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+  }
+  .next-text {
+    max-width: 560px;
+  }
+  .next h2 {
+    margin: 0 0 8px;
+    font-weight: 800;
+    font-stretch: 118%;
+    font-size: clamp(24px, 3vw, 36px);
+    line-height: 1.05;
+  }
+  .next p {
+    font-size: 17px;
+  }
+  .next-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>

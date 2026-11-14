@@ -1,0 +1,230 @@
+/*
+ * Case-study body (Markdown). Structure comes from
+ * src/lib/markdown/case-study-plugins.mjs; values from the design's case page.
+ */
+
+.cs-content {
+  counter-reset: cs-section;
+}
+
+/* Text before the first ## heading */
+.cs-content > p {
+  margin-top: clamp(40px, 6vw, 72px);
+  font-size: clamp(18px, 1.8vw, 21px);
+  line-height: 1.55;
+  max-width: 720px;
+  text-wrap: pretty;
+}
+
+.cs-section {
+  margin-top: clamp(56px, 8vw, 112px);
+}
+
+/* Red rule ending in a dot, above every section */
+.cs-section::before {
+  content: '';
+  display: block;
+  height: 7px;
+  margin-bottom: 20px;
+  background:
+    linear-gradient(var(--red), var(--red)) left center / calc(100% - 7px) 1px no-repeat,
+    radial-gradient(circle, var(--red) 3.5px, transparent 4px) right center / 7px 7px no-repeat;
+}
+
+.cs-section h2 {
+  font-weight: 800;
+  font-stretch: 118%;
+  font-size: clamp(28px, 3.6vw, 44px);
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+/* "01", "02"… above each heading (hidden from screen readers) */
+.cs-content .cs-section h2::before {
+  counter-increment: cs-section;
+  content: counter(cs-section, decimal-leading-zero) / '';
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* Heading left, text right */
+.cs-section--text {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 16px clamp(32px, 5vw, 72px);
+}
+.cs-section--text::before {
+  grid-column: 1 / -1;
+  margin-bottom: 4px;
+}
+.cs-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 640px;
+}
+.cs-body > p {
+  font-size: clamp(18px, 1.8vw, 21px);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* Lists: "// item" rows with rules */
+.cs-content ul,
+.cs-content ol:not(.cs-steps) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.cs-content li {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  font-size: 17px;
+}
+.cs-content ul > li::before {
+  content: '//' / '';
+  color: var(--red);
+  font-weight: 800;
+  font-size: 12px;
+  flex: none;
+}
+
+/* Dashed placeholder box for "[TODO …]" paragraphs */
+.cs-content p.cs-todo {
+  font-size: 17px;
+  line-height: 1.55;
+  padding: 16px;
+  border: 1px dashed var(--line-strong);
+  color: var(--muted);
+}
+
+/* Sections with images: heading on top */
+.cs-section--media > h2 {
+  margin: 0 0 32px;
+}
+.cs-section--media > p {
+  max-width: 720px;
+  font-size: 18px;
+  line-height: 1.55;
+  margin-top: 16px;
+}
+
+/* Figures */
+.cs-figure {
+  margin: 0;
+}
+.cs-figure .notch {
+  display: block;
+}
+.cs-figure .notch-in {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.cs-figure img {
+  width: 100%;
+  height: auto;
+}
+.cs-figure.is-graphic .notch-in {
+  background: #fff;
+  padding: 8%;
+}
+.cs-figure figcaption {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.cs-section--media > .cs-figure .notch,
+.cs-section--media > .cs-figure .zoom > .notch {
+  --c: 22px;
+}
+.cs-section--media > .cs-figure .notch,
+.cs-section--media > .cs-figure .notch > .notch-in {
+  clip-path: polygon(var(--k) 0, 100% 0, 100% calc(100% - var(--k)), calc(100% - var(--k)) 100%, 0 100%, 0 var(--k));
+}
+.cs-figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 24px;
+}
+
+/* "Image to come" placeholder */
+.cs-ph {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  padding: 16px;
+}
+.cs-figure.is-placeholder .notch-in {
+  display: block;
+}
+
+/* Process steps: image, "01 → SKETCH", text */
+.cs-steps {
+  counter-reset: cs-step;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 40px 24px;
+}
+.cs-step {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cs-step > .cs-figure,
+.cs-step > .cs-figures {
+  order: -1;
+}
+.cs-step h3 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.cs-step h3::before {
+  counter-increment: cs-step;
+  content: counter(cs-step, decimal-leading-zero) ' → ' / '';
+}
+.cs-step > p {
+  font-size: 16px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.cs-step .cs-figure .notch-in {
+  aspect-ratio: 4 / 3;
+}
+.cs-step .cs-figure img {
+  height: 100%;
+  object-fit: contain;
+}
+.cs-step .cs-figure.is-photo img {
+  object-fit: cover;
+}
+.cs-step .cs-figure figcaption {
+  display: none;
+}
+
+/* Gallery (frontmatter) */
+.cs-gallery::before {
+  margin-bottom: 20px;
+}
+.cs-gallery > h2 {
+  font-size: 12px;
+  font-weight: 700;
+  font-stretch: 100%;
+  letter-spacing: 0.14em;
+  line-height: 1.6;
+  text-transform: uppercase;
+  color: var(--muted);
+}
