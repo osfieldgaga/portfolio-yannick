@@ -16,7 +16,7 @@ const other = otherLang(lang);
 const { t } = useT(other);
 ---
 
-<div class="lang-banner" data-lang-banner data-page-lang={lang} data-other-lang={other} lang={other} hidden>
+<aside class="lang-banner" aria-label={t('nav.langGroup')} data-lang-banner data-page-lang={lang} data-other-lang={other} lang={other} hidden>
   <div class="inner">
     <p>
       <span class="slashes" aria-hidden="true">///</span>
@@ -27,7 +27,7 @@ const { t } = useT(other);
       <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
     </button>
   </div>
-</div>
+</aside>
 
 <style>
   .lang-banner {

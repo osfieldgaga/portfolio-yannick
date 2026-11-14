@@ -1,0 +1,22 @@
+# Runs the accessibility (axe) and Lighthouse audit on every pull request
+# and on pushes to main. Deployment itself is done by Cloudflare Workers Builds.
+name: Audit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run audit

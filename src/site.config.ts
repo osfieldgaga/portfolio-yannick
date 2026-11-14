@@ -5,8 +5,8 @@
  */
 export const site = {
   name: 'Yannick Bamona',
-  /** Production URL, no trailing slash. Also set as `site` in astro.config.mjs. */
-  url: 'https://yannickbamona.com',
+  /** Production URL, no trailing slash. Comes from `site` in astro.config.mjs. */
+  url: (import.meta.env.SITE as string | undefined)?.replace(/\/$/, '') || 'https://yannickbamona.com',
   email: 'yannbamona@gmail.com',
   /** International format, digits only (used for https://wa.me/<number>). */
   whatsapp: '2290144154739',

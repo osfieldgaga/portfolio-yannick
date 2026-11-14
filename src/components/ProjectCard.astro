@@ -18,8 +18,9 @@ const items = p.cover ? JSON.stringify(await lightboxItems(p.images)) : undefine
 <li class="card" data-category={p.category} data-slug={p.slug} data-title={p.title} data-caption={p.summary} data-lightbox-items={items}>
   {
     p.cover ? (
+      <div class="frame">
       <button type="button" class="zoom" data-lightbox-open={p.slug} aria-label={t('work.open', { t: p.title })}>
-        <div class="notch notch-tl frame">
+        <div class="notch notch-tl">
           <div class="notch-in shot" style={`background:${p.coverBg}`}>
             <Picture
               src={p.cover.src}
@@ -31,9 +32,10 @@ const items = p.cover ? JSON.stringify(await lightboxItems(p.images)) : undefine
               style={`object-fit:${p.coverFit};padding:${p.coverPadding}`}
             />
           </div>
-          {multi && <span class="count">{t('work.imageCount', { i: 1, n: p.images.length })}</span>}
         </div>
       </button>
+      {multi && <span class="count" aria-hidden="true">{t('work.imageCount', { i: 1, n: p.images.length })}</span>}
+      </div>
     ) : (
       <div class="notch notch-tl notch-soft">
         <div class="notch-in placeholder hatch" role="img" aria-label={p.placeholder ?? p.title}>
@@ -82,6 +84,7 @@ const items = p.cover ? JSON.stringify(await lightboxItems(p.images)) : undefine
     height: 100%;
   }
   .count {
+    pointer-events: none;
     position: absolute;
     right: 10px;
     bottom: 10px;

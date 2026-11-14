@@ -6,7 +6,8 @@ import { alternatesForPath } from './src/i18n/routes.ts';
 import { todoImages, requireAlt, caseStudyLayout } from './src/lib/markdown/case-study-plugins.mjs';
 
 // https://docs.astro.build/en/reference/configuration-reference/
-const SITE = 'https://yannickbamona.com';
+// SITE_URL lets the audit build against localhost; production uses the real domain.
+const SITE = process.env.SITE_URL || 'https://yannickbamona.com';
 
 export default defineConfig({
   site: SITE,

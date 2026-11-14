@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": ">=22"
+    "node": ">=22.23.4"
   },
   "scripts": {
     "dev": "astro dev",
@@ -12,7 +12,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro",
-    "new:project": "node scripts/new-project.mjs"
+    "new:project": "node scripts/new-project.mjs",
+    "audit": "node scripts/audit.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.10",
@@ -23,6 +24,9 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
+    "axe-core": "^4.14.0",
+    "chrome-launcher": "^1.2.2",
+    "lighthouse": "^13.6.0",
     "typescript": "^6.0.3"
   }
 }
