@@ -190,7 +190,15 @@ Useful places:
 | Tools list | `tools.groups` |
 | Contact form labels and error messages | `contact` |
 | Page titles and Google descriptions | `meta` (keep descriptions under about 160 characters) |
+| Search keywords (structured data and `/llms.txt`) | `meta.keywords` |
 | Category names | `categories` |
+
+**For search engines and AI assistants**, the site publishes:
+- `/sitemap-index.xml`: every page with its French/English pair, plus an image sitemap of all project images (for Google Images)
+- `/robots.txt`: open to everything, including AI assistants (ChatGPT, Claude, Perplexity, Gemini…). To opt out of AI *training* while staying visible in AI answers, set `ai-train=no` in `src/pages/robots.txt.ts`
+- `/llms.txt`: a plain-text summary of Yannick, his services and projects, written for AI assistants. It's built from the same texts and projects, so there's nothing to update by hand.
+
+Keywords help most in the visible text: page titles, descriptions, project summaries and case studies. Write them the way a client would search ("création de logo à Cotonou", "affiche publicitaire").
 
 ---
 
@@ -252,7 +260,9 @@ The site is hosted for free on **Cloudflare Workers** (static files only, no ser
 2. Open the Worker → **Settings → Domains & Routes → Add → Custom domain** → `yannickbamona.com`. Cloudflare creates the DNS record and the HTTPS certificate.
 3. Add `www.yannickbamona.com` the same way, then in **Rules → Redirect Rules** create a redirect from `www.yannickbamona.com/*` to `https://yannickbamona.com/${1}` (301), so there's one address.
 4. Optional: **Google Search Console** → add the property `https://yannickbamona.com`, choose the *HTML tag* method, put the `content="…"` value in `googleSiteVerification` in `src/site.config.ts`, push, then submit `https://yannickbamona.com/sitemap-index.xml`.
-5. Optional: **Cloudflare Web Analytics** (cookie-free page counts). Create a site in *Analytics & Logs → Web Analytics* and put its token in `cloudflareAnalyticsToken` in `src/site.config.ts`.
+5. **Let AI assistants in.** Cloudflare can block AI crawlers on your behalf, and on new domains this is sometimes on by default. In the domain's **Security → Settings** (or **AI Crawl Control**), turn **off** "Block AI bots" and "Manage your robots.txt" (or "Instruct AI bot traffic with robots.txt"), otherwise Cloudflare blocks them or adds its own rules in front of the site's `robots.txt`. Check the result at `https://yannickbamona.com/robots.txt`: it should start with `# Yannick Bamona — portfolio`.
+   Also submit the sitemap in **Bing Webmaster Tools** (it can import from Google Search Console in one click): ChatGPT and Copilot search on Bing's index.
+6. Optional: **Cloudflare Web Analytics** (cookie-free page counts). Create a site in *Analytics & Logs → Web Analytics* and put its token in `cloudflareAnalyticsToken` in `src/site.config.ts`.
 
 ### Day to day
 

@@ -16,6 +16,9 @@ export const profileLinks = () => site.socials.map((s) => s.href).filter((h) => 
 
 const both = (key: Parameters<ReturnType<typeof useT>['t']>[0]) => LANGS.map((l) => ({ '@value': useT(l).t(key), '@language': l }));
 
+/** The keyword list from i18n (meta.keywords) in both languages. */
+const keywordsBoth = () => LANGS.flatMap((l) => useT(l).d.meta.keywords.map((k) => ({ '@value': k, '@language': l })));
+
 const address = {
   '@type': 'PostalAddress',
   addressLocality: site.location.city,
@@ -31,6 +34,8 @@ export function personLd(lang: Lang) {
     name: site.name,
     url: abs(pages.home[lang]),
     jobTitle: both('hero.role'),
+    // Skills in both languages, read by search engines and AI assistants.
+    knowsAbout: keywordsBoth(),
     email: `mailto:${site.email}`,
     address,
     knowsLanguage: [
@@ -49,6 +54,7 @@ export function websiteLd(lang: Lang) {
     name: site.name,
     url: abs(pages.home[lang]),
     inLanguage: lang,
+    keywords: useT(lang).d.meta.keywords.join(', '),
     publisher: { '@id': PERSON_ID },
   };
 }
@@ -62,6 +68,7 @@ export function professionalServiceLd(lang: Lang) {
     name: `${site.name} — ${t('hero.role')}`,
     url: abs(pages.services[lang]),
     description: t('meta.servicesDescription'),
+    keywords: d.meta.keywords.join(', '),
     email: site.email,
     telephone: `+${site.whatsapp}`,
     image: abs(site.ogImage),
@@ -80,7 +87,7 @@ export function professionalServiceLd(lang: Lang) {
   };
 }
 
-export function creativeWorkLd(opts: { lang: Lang; url: string; name: string; description: string; image?: string; year?: number; genre: string; client?: string }) {
+export function creativeWorkLd(opts: { lang: Lang; url: string; name: string; description: string; image?: string; year?: number; genre: string; client?: string; keywords?: string[] }) {
   return {
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
@@ -91,6 +98,7 @@ export function creativeWorkLd(opts: { lang: Lang; url: string; name: string; de
     creator: { '@id': PERSON_ID, '@type': 'Person', name: site.name },
     genre: opts.genre,
     about: opts.genre,
+    ...(opts.keywords?.length ? { keywords: opts.keywords.join(', ') } : {}),
     ...(opts.image ? { image: abs(opts.image) } : {}),
     ...(opts.year ? { dateCreated: String(opts.year) } : {}),
     ...(opts.client ? { sourceOrganization: { '@type': 'Organization', name: opts.client } } : {}),

@@ -36,7 +36,7 @@ const description = d.subtitle ?? d.summary;
 const ogImage = await projectOgImage(p);
 const url = projectPath(lang, p.slug);
 const jsonLd = [
-  creativeWorkLd({ lang: p.contentLang, url, name: p.title, description, image: ogImage?.src, year: d.year, genre: catLabel, client: d.client }),
+  creativeWorkLd({ lang: p.contentLang, url, name: p.title, description, image: ogImage?.src, year: d.year, genre: catLabel, client: d.client, keywords: [catLabel, ...d.tools] }),
   breadcrumbLd(lang, p.title, url),
 ];
 ---

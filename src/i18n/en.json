@@ -1,17 +1,38 @@
 {
   "langName": "English",
   "meta": {
-    "siteTitle": "Yannick Bamona — Graphic Designer · Illustrator",
+    "siteTitle": "Yannick Bamona — Graphic Designer & Illustrator in Cotonou, Benin",
     "homeDescription": "Yannick Bamona, graphic designer and illustrator in Cotonou, Benin. Logos, brand identities, campaign posters, illustration and video editing.",
-    "aboutTitle": "About",
+    "aboutTitle": "About — graphic designer and illustrator",
     "aboutDescription": "Graphic designer and illustrator based in Cotonou, trained at Studio M in Casablanca. Logos, brand charters and posters for agencies in Benin since 2016.",
-    "servicesTitle": "Services",
+    "servicesTitle": "Services — logo, brand identity, posters, illustration",
     "servicesDescription": "Brand identity, campaign posters, illustration and video editing, in French and English, for clients in Benin and abroad.",
-    "contactTitle": "Contact",
+    "contactTitle": "Contact — graphic designer in Cotonou",
     "contactDescription": "Have a logo, campaign or poster to make? Reach Yannick Bamona by email, WhatsApp or the contact form.",
     "notFoundTitle": "Page not found",
     "notFoundDescription": "This page doesn’t exist or has moved.",
-    "ogLocale": "en_US"
+    "ogLocale": "en_US",
+    "keywords": [
+      "graphic designer",
+      "freelance graphic designer",
+      "graphic designer in Cotonou",
+      "graphic designer in Benin",
+      "graphic designer in West Africa",
+      "illustrator",
+      "illustrator in Cotonou",
+      "logo design",
+      "brand identity",
+      "visual identity",
+      "brand guidelines",
+      "poster design",
+      "campaign posters",
+      "digital illustration",
+      "portrait illustration",
+      "mascot design",
+      "video editing",
+      "motion graphics",
+      "bilingual French-English graphic designer"
+    ]
   },
   "nav": {
     "main": "Main navigation",

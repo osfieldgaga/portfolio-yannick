@@ -23,6 +23,8 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
+      // Project images (src/pages/sitemap-images.xml.ts) are listed in the index too.
+      customSitemaps: [new URL('/sitemap-images.xml', SITE).href],
       // Each URL lists its French and English versions (hreflang alternates).
       serialize(item) {
         const alt = alternatesForPath(new URL(item.url).pathname);
