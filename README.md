@@ -194,7 +194,7 @@ Useful places:
 | Category names | `categories` |
 
 **For search engines and AI assistants**, the site publishes:
-- `/sitemap-index.xml`: every page with its French/English pair, plus an image sitemap of all project images (for Google Images)
+- `/sitemap-index.xml` (`/sitemap.xml` redirects to it): every page with its French/English pair, plus an image sitemap of all project images (for Google Images)
 - `/robots.txt`: open to everything, including AI assistants (ChatGPT, Claude, Perplexity, Gemini…). To opt out of AI *training* while staying visible in AI answers, set `ai-train=no` in `src/pages/robots.txt.ts`
 - `/llms.txt`: a plain-text summary of Yannick, his services and projects, written for AI assistants. It's built from the same texts and projects, so there's nothing to update by hand.
 

@@ -1,0 +1,2 @@
+# Common addresses tools look for → the real sitemap
+/sitemap.xml /sitemap-index.xml 301
