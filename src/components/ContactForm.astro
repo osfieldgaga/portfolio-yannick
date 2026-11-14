@@ -289,6 +289,9 @@ const messages = {
       const data = new FormData(form);
       const name = fields.name.value.trim();
       const done = () => {
+        (window as unknown as { ybTrack?: (e: string, p?: Record<string, unknown>) => void }).ybTrack?.('contact_form_sent', {
+          project_type: fields.type.value,
+        });
         sentBody.textContent = m.sentB.replace('{name}', name);
         form.hidden = true;
         sent.hidden = false;

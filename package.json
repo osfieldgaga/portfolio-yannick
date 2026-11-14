@@ -16,8 +16,10 @@
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.10",
+    "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.5",
-    "astro": "^7.4.12"
+    "astro": "^7.4.12",
+    "posthog-js": "^1.442.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",

@@ -1,11 +1,15 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import { satteri } from '@astrojs/markdown-satteri';
+import sitemap from '@astrojs/sitemap';
+import { alternatesForPath } from './src/i18n/routes.ts';
 import { todoImages, requireAlt, caseStudyLayout } from './src/lib/markdown/case-study-plugins.mjs';
 
 // https://docs.astro.build/en/reference/configuration-reference/
+const SITE = 'https://yannickbamona.com';
+
 export default defineConfig({
-  site: 'https://yannickbamona.com',
+  site: SITE,
   // Every URL ends with "/" (e.g. /a-propos/). wrangler.jsonc uses the matching
   // html_handling: "force-trailing-slash".
   trailingSlash: 'always',
@@ -16,6 +20,22 @@ export default defineConfig({
     // French lives at the root (/), English under /en/.
     routing: { prefixDefaultLocale: false },
   },
+  integrations: [
+    sitemap({
+      // Each URL lists its French and English versions (hreflang alternates).
+      serialize(item) {
+        const alt = alternatesForPath(new URL(item.url).pathname);
+        if (alt) {
+          item.links = [
+            { lang: 'fr', url: new URL(alt.fr, SITE).href },
+            { lang: 'en', url: new URL(alt.en, SITE).href },
+            { lang: 'x-default', url: new URL(alt.fr, SITE).href },
+          ];
+        }
+        return item;
+      },
+    }),
+  ],
   image: {
     // Images in Markdown get a responsive srcset, width/height and lazy-loading.
     layout: 'constrained',

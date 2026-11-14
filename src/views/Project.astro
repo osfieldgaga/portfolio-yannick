@@ -6,7 +6,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import Lightbox from '../components/Lightbox.astro';
 import { useT, type Lang } from '../i18n';
-import { sectionHref, projectAlternates } from '../i18n/routes';
+import { sectionHref, projectAlternates, projectPath } from '../i18n/routes';
+import { creativeWorkLd, breadcrumbLd } from '../lib/jsonld';
+import { projectOgImage } from '../lib/og';
 import { fullSize, type Project } from '../lib/projects';
 import '../styles/case-study.css';
 
@@ -31,6 +33,12 @@ const meta = [
 const coverFull = p.cover ? await fullSize(p.cover.src) : undefined;
 const gallery = await Promise.all(d.gallery.map(async (g) => ({ ...g, full: await fullSize(g.src) })));
 const description = d.subtitle ?? d.summary;
+const ogImage = await projectOgImage(p);
+const url = projectPath(lang, p.slug);
+const jsonLd = [
+  creativeWorkLd({ lang: p.contentLang, url, name: p.title, description, image: ogImage?.src, year: d.year, genre: catLabel, client: d.client }),
+  breadcrumbLd(lang, p.title, url),
+];
 ---
 
 <BaseLayout
@@ -38,6 +46,11 @@ const description = d.subtitle ?? d.summary;
   title={`${p.title} · ${catLabel}`}
   description={description}
   alternates={projectAlternates(p.slug)}
+  image={ogImage?.src}
+  imageWidth={ogImage?.width}
+  imageHeight={ogImage?.height}
+  imageAlt={p.cover?.alt}
+  jsonLd={jsonLd}
   type="article">
   <article class="case" aria-labelledby="case-title">
     <a class="back" href={sectionHref(lang, 'work')}><Icon name="arrow-left" />{t('case.back')}</a>

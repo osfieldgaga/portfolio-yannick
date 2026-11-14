@@ -1,0 +1,67 @@
+---
+/**
+ * PostHog, loaded on the first interaction or 4 s after page load (it never delays the page),
+ * in cookieless mode. Rendered only when site.posthog.key is set.
+ *
+ * Custom events:
+ *   - any element with data-track="event_name" (and optional data-track-label) sends that event on click
+ *   - window.ybTrack(name, props) from other scripts (e.g. the contact form)
+ */
+import { site } from '../site.config';
+import type { Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+---
+
+<div hidden data-posthog data-key={site.posthog.key} data-host={site.posthog.host} data-lang={lang}></div>
+
+<script>
+  type Props = Record<string, unknown>;
+  type Capture = (event: string, props?: Props) => void;
+  const w = window as unknown as { ybTrack?: Capture; __ybQueue?: [string, Props?][] };
+
+  const el = document.querySelector<HTMLElement>('[data-posthog]');
+  if (el?.dataset.key) {
+    const queue: [string, Props?][] = (w.__ybQueue = w.__ybQueue ?? []);
+    let capture: Capture | null = null;
+    w.ybTrack = (event, props) => (capture ? capture(event, props) : queue.push([event, props]));
+
+    // Clicks on [data-track] elements (CV download, WhatsApp, email, socials…)
+    document.addEventListener('click', (e) => {
+      const t = (e.target as HTMLElement).closest<HTMLElement>('[data-track]');
+      if (t) w.ybTrack!(t.dataset.track!, t.dataset.trackLabel ? { label: t.dataset.trackLabel } : undefined);
+    });
+
+    const load = async () => {
+      const { default: posthog } = await import('posthog-js');
+      posthog.init(el.dataset.key!, {
+        api_host: el.dataset.host,
+        cookieless_mode: 'always',
+        person_profiles: 'identified_only',
+        capture_pageview: true,
+        capture_pageleave: true,
+      });
+      posthog.register({ site_lang: el.dataset.lang });
+      capture = (event, props) => posthog.capture(event, props);
+      queue.splice(0).forEach(([ev, p]) => capture!(ev, p));
+    };
+
+    // Load on the first interaction, or 4 s after the page has loaded, whichever comes first,
+    // so the ~100 KB library never competes with the page itself on slow connections.
+    let started = false;
+    const start = () => {
+      if (started) return;
+      started = true;
+      EVENTS.forEach((ev) => window.removeEventListener(ev, start));
+      load();
+    };
+    const EVENTS = ['pointerdown', 'keydown', 'scroll', 'touchstart'] as const;
+    EVENTS.forEach((ev) => window.addEventListener(ev, start, { once: true, passive: true }));
+    const later = () => setTimeout(start, 4000);
+    if (document.readyState === 'complete') later();
+    else window.addEventListener('load', later, { once: true });
+  }
+</script>

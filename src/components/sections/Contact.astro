@@ -24,14 +24,14 @@ const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(t('cont
     <div class="info">
       <H id="contact-title" class="h-section">{t('contact.title')}</H>
       <p class="intro">{t('contact.intro')}</p>
-      <a class="email" href={`mailto:${site.email}`}>{site.email}</a>
+      <a class="email" href={`mailto:${site.email}`} data-track="email_click">{site.email}</a>
       <div class="ctas">
-        <a href={waHref} target="_blank" rel="noopener" class="btn btn-primary">
+        <a href={waHref} target="_blank" rel="noopener" class="btn btn-primary" data-track="whatsapp_click">
           <Icon name="whatsapp" size={18} />
           {t('contact.wa')}
           <span class="sr-only">{t('contact.newTab')}</span>
         </a>
-        <a href={site.cv[lang]} download class="btn btn-secondary">
+        <a href={site.cv[lang]} download class="btn btn-secondary" data-track="cv_download" data-track-label={lang}>
           <Icon name="download" size={18} />
           {t('contact.cv')}
         </a>
@@ -42,7 +42,7 @@ const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(t('cont
           {
             site.socials.map((s) => (
               <li>
-                <a href={s.href} target="_blank" rel="noopener me">
+                <a href={s.href} target="_blank" rel="noopener me" data-track="social_click" data-track-label={s.label}>
                   {s.label}
                   <span class="sr-only">{t('contact.newTab')}</span>
                   <Icon name="arrow-up-right" size={14} stroke="var(--red)" />

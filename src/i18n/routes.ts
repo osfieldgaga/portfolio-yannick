@@ -34,3 +34,10 @@ export type SectionKey = keyof typeof sections;
 
 export const sectionId = (lang: Lang, s: SectionKey) => sections[s][lang];
 export const sectionHref = (lang: Lang, s: SectionKey) => `${pages.home[lang]}#${sections[s][lang]}`;
+
+/** French/English pair for any built URL path (used by the sitemap). */
+export function alternatesForPath(path: string): Alternates | undefined {
+  for (const p of Object.values(pages)) if (p.fr === path || p.en === path) return { ...p };
+  const m = path.match(/^\/projets\/([^/]+)\/$/) ?? path.match(/^\/en\/projects\/([^/]+)\/$/);
+  return m ? projectAlternates(m[1]) : undefined;
+}

@@ -63,7 +63,10 @@ const filters = [
     };
     group.addEventListener('click', (e) => {
       const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter]');
-      if (b) apply(b.dataset.filter!);
+      if (b) {
+        apply(b.dataset.filter!);
+        (window as unknown as { ybTrack?: (e: string, p?: Record<string, unknown>) => void }).ybTrack?.('work_filter', { category: b.dataset.filter });
+      }
     });
     document.addEventListener('yb:filter', (e) => apply((e as CustomEvent<string>).detail, false));
   }

@@ -11,6 +11,7 @@ import Lightbox from '../components/Lightbox.astro';
 import { useT, type Lang } from '../i18n';
 import { pages } from '../i18n/routes';
 import { getProjectCards } from '../lib/projects';
+import { personLd, websiteLd, professionalServiceLd } from '../lib/jsonld';
 
 interface Props {
   lang: Lang;
@@ -22,7 +23,7 @@ const projects = await getProjectCards(lang);
 const featured = projects.find((p) => p.featured && p.cover) ?? projects.find((p) => p.cover);
 ---
 
-<BaseLayout lang={lang} description={t('meta.homeDescription')} alternates={pages.home} type="profile">
+<BaseLayout lang={lang} description={t('meta.homeDescription')} alternates={pages.home} type="profile" jsonLd={[personLd(lang), websiteLd(lang), professionalServiceLd(lang)]}>
   <Hero lang={lang} featured={featured} total={projects.length} />
   <Work lang={lang} projects={projects} />
   <Services lang={lang} />

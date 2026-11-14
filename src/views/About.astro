@@ -5,6 +5,7 @@ import About from '../components/sections/About.astro';
 import Tools from '../components/sections/Tools.astro';
 import { useT, type Lang } from '../i18n';
 import { pages } from '../i18n/routes';
+import { personLd } from '../lib/jsonld';
 
 interface Props {
   lang: Lang;
@@ -13,7 +14,7 @@ const { lang } = Astro.props;
 const { t } = useT(lang);
 ---
 
-<BaseLayout lang={lang} title={t('meta.aboutTitle')} description={t('meta.aboutDescription')} alternates={pages.about} type="profile">
+<BaseLayout lang={lang} title={t('meta.aboutTitle')} description={t('meta.aboutDescription')} alternates={pages.about} type="profile" jsonLd={personLd(lang)}>
   <About lang={lang} headingLevel="h1" />
   <Tools lang={lang} />
   <div class="page-end" aria-hidden="true"></div>
